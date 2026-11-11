@@ -1,91 +1,174 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getProject, getProjectLiveUrl, projects } from "@/lib/projects";
+import { getProject, getProjectLiveUrl } from "@/lib/projects";
 import { InteractiveDemo } from "@/components/InteractiveDemo";
-import { AISessionProvider } from "@/components/AISessionProvider";
+
+const PUBLIC_PROJECT_SLUGS = ["evidenceflow", "quotesense"] as const;
+type PublicProjectSlug = (typeof PUBLIC_PROJECT_SLUGS)[number];
+
+export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
+  return PUBLIC_PROJECT_SLUGS.map((slug) => ({ slug }));
 }
 
-export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
+  if (!PUBLIC_PROJECT_SLUGS.includes(slug as PublicProjectSlug)) {
+    return { title: "Engineering reference not found" };
+  }
+
+  const project = getProject(slug);
+  if (!project) return { title: "Engineering reference not found" };
+
+  return {
+    title: project.name,
+    description: project.description,
+    alternates: { canonical: `/projects/${project.slug}` },
+    openGraph: {
+      title: `${project.name} | AI Engineering Studio`,
+      description: project.description,
+      type: "article",
+    },
+  };
+}
+
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  if (!PUBLIC_PROJECT_SLUGS.includes(slug as PublicProjectSlug)) notFound();
+
   const project = getProject(slug);
   if (!project) notFound();
-  const star = project.star;
+
+  const liveUrl = getProjectLiveUrl(project);
+  const story = project.star;
 
   return (
-    <AISessionProvider>
-      <main className="shell">
-        <section className="detail-hero">
-          <div className="eyebrow">{project.eyebrow}</div>
+    <main className="studio-main studio-project-page">
+      <div className="studio-container">
+        <section className="studio-project-hero">
+          <Link className="studio-back-link" href="/#work">← Engineering references</Link>
+          <p className="studio-eyebrow">System reference / {project.number}</p>
+          <p className="studio-project-category">{project.eyebrow}</p>
           <h1>{project.name}</h1>
-          <p className="lead">{project.description}</p>
-          <div className="hero-meta">
-            <Link className="btn btn-primary" href="#project-demo">Try live demo →</Link>
-            <a className="btn btn-secondary" href={project.github} target="_blank" rel="noreferrer">View GitHub ↗</a>
+          <p className="studio-project-lead">{project.description}</p>
+          <div className="studio-project-links">
+            {liveUrl && <a href={liveUrl} target="_blank" rel="noreferrer">Open live system ↗</a>}
+            <a href={project.github} target="_blank" rel="noreferrer">Inspect source ↗</a>
           </div>
         </section>
 
-        {star && (
-          <section className="star-section" aria-labelledby="star-heading">
-            <h2><div className="section-kicker">Project story</div></h2>
-            {/* <h2 id="star-heading"></h2> */}
-            <div className="star-grid">
-              <article className="star-card"><span>01</span><h3>Situation</h3><p>{star.situation}</p></article>
-              <article className="star-card"><span>02</span><h3>Task</h3><p>{star.task}</p></article>
-              <article className="star-card star-card-wide"><span>03</span><h3>Action</h3><ul>{star.action.map((item) => <li key={item}>{item}</li>)}</ul></article>
-              <article className="star-card star-card-wide"><span>04</span><h3>Result</h3><ul>{star.result.map((item) => <li key={item}>{item}</li>)}</ul></article>
+        <section className="studio-project-overview">
+          <article>
+            <p className="studio-eyebrow">Problem context</p>
+            <h2>What the system addresses</h2>
+            <p>{project.problem}</p>
+          </article>
+          <article>
+            <p className="studio-eyebrow">Engineering approach</p>
+            <h2>How the system is designed</h2>
+            <p>{project.solution}</p>
+          </article>
+        </section>
+
+        <section className="studio-project-section">
+          <p className="studio-eyebrow">System architecture</p>
+          <h2>Architecture and workflow</h2>
+          <ol className="studio-architecture-list">
+            {project.architecture.map((item, index) => (
+              <li key={item}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <strong>{item}</strong>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <section className="studio-project-section">
+          <p className="studio-eyebrow">Implementation detail</p>
+          <h2>Technical decisions and reliability</h2>
+          <div className="studio-project-tags">
+            {project.tags.map((tag) => <span key={tag}>{tag}</span>)}
+          </div>
+          <div className="studio-project-overview studio-project-lists">
+            <article>
+              <h3>Design decisions</h3>
+              <ul>{project.decisions.map((item) => <li key={item}>{item}</li>)}</ul>
+            </article>
+            <article>
+              <h3>Reliability considerations</h3>
+              <ul>{project.reliability.map((item) => <li key={item}>{item}</li>)}</ul>
+            </article>
+          </div>
+        </section>
+
+        {story && (
+          <section className="studio-project-section">
+            <p className="studio-eyebrow">Build notes</p>
+            <h2>From problem to implementation</h2>
+            <div className="studio-story-grid">
+              <article>
+                <span className="studio-number">01 / Situation</span>
+                <p>{story.situation}</p>
+              </article>
+              <article>
+                <span className="studio-number">02 / Task</span>
+                <p>{story.task}</p>
+              </article>
+              <article>
+                <span className="studio-number">03 / Action</span>
+                <ul>{story.action.map((item) => <li key={item}>{item}</li>)}</ul>
+              </article>
+              <article>
+                <span className="studio-number">04 / Result</span>
+                <ul>{story.result.map((item) => <li key={item}>{item}</li>)}</ul>
+              </article>
             </div>
           </section>
         )}
 
-        {/* <section className="media-placeholder" aria-label="Project media placeholder">
-          <div>
-            <div className="section-kicker">Media</div>
-            <h2>Demo video & screenshots</h2>
-            <p>Reserved space for a short walkthrough and selected screens. The technical story below stays readable even before the final media is added.</p>
+        <section className="studio-project-demo-section" id="try-demo">
+          <div className="studio-section-heading">
+            <div>
+              <p className="studio-eyebrow">Live system access</p>
+              <h2>Connect a provider and open this demonstration.</h2>
+            </div>
+            <p>
+              Demo access is shared with the homepage workbench. A provider
+              session can be connected once and reused across the two public
+              engineering references.
+            </p>
           </div>
-          <div className="media-slot-grid" aria-hidden="true">
-            <div className="media-slot">VIDEO PLACEHOLDER</div>
-            <div className="media-slot">SCREENSHOT PLACEHOLDER</div>
-            <div className="media-slot">SCREENSHOT PLACEHOLDER</div>
-          </div>
-        </section> */}
-
-        <section className="detail-grid">
-          {/* <article className="detail-panel"> */}
-            {/* <h3>Problem</h3>
-            <p>{project.problem}</p>
-            <h3 style={{ marginTop: 28 }}>Solution</h3>
-            <p>{project.solution}</p> */}
-            {/* <h3 style={{ marginTop: 28 }}>Architecture</h3>
-            <div className="architecture">{project.architecture.map((x) => <span className="tag" key={x}>{x}</span>)}</div>
-          </article> */}
-          <aside className="detail-panel">
-            <h3>Technology</h3>
-            <div className="tags">{project.tags.map((x) => <span className="tag" key={x}>{x}</span>)}</div>
-            <h3 style={{ marginTop: 28 }}>Engineering decisions</h3>
-            <ul>{project.decisions.map((x) => <li key={x}>{x}</li>)}</ul>
-            <h3 style={{ marginTop: 28 }}>Reliability</h3>
-            <ul>{project.reliability.map((x) => <li key={x}>{x}</li>)}</ul>
-          </aside>
-        </section>
-
-        <section id="project-demo" className="section" style={{ paddingTop: 0 }}>
           <InteractiveDemo
-            project={project.slug}
-            mode="manager"
-            title={`Try ${project.name} live`}
-            description="Bring your own provider key to create a short-lived session for this project. The portfolio does not store the credential."
-            liveUrl={getProjectLiveUrl(project)}
+            projects={[
+              {
+                slug: project.slug,
+                name: project.name,
+                category: project.eyebrow,
+                description: project.short,
+                tags: project.tags,
+                liveUrl,
+                githubUrl: project.github,
+                detailsUrl: "",
+              },
+            ]}
           />
         </section>
 
-        <div className="center" style={{ paddingBottom: 80 }}>
-          <Link className="btn btn-secondary" href="/#work">← Back to projects</Link>
+        <div className="studio-project-bottom-links">
+          <Link href="/#work">← Back to engineering references</Link>
+          <Link href="/#contact">Discuss a related engagement ↗</Link>
         </div>
-      </main>
-    </AISessionProvider>
+      </div>
+    </main>
   );
 }

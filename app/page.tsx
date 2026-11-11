@@ -1,172 +1,353 @@
 import Link from "next/link";
-import { ProjectCarousel } from "@/components/ProjectCarousel";
-import { getProjects } from "@/lib/portfolio-data";
+import { ContactForm } from "@/components/ContactForm";
+import { InteractiveDemo } from "@/components/InteractiveDemo";
+import { services } from "@/lib/services";
 
-const CONTACT_EMAIL = process.env.NEXT_PUBLIC_CONTACT_EMAIL?.trim() || "";
-const HERO_IMAGE_URL = process.env.HERO_IMAGE_URL?.trim() || "";
+const demos = [
+  {
+    slug: "evidenceflow",
+    name: "EvidenceFlow",
+    category: "Knowledge systems / RAG",
+    description:
+      "A sparse-first research and knowledge system combining OpenSearch BM25, retrieval fusion, reranking, evidence tracking, and citation verification.",
+    tags: ["LangGraph", "OpenSearch", "BM25", "RRF", "Reranking"],
+    liveUrl: "https://langgraph-rag-hdkn.onrender.com",
+    githubUrl: "https://github.com/AsaifAli/LangGraph-RAG",
+    detailsUrl: "/projects/evidenceflow",
+  },
+  {
+    slug: "quotesense",
+    name: "QuoteSense",
+    category: "Document intelligence / Procurement",
+    description:
+      "A quotation-analysis workflow that extracts document information into typed structures, validates it, and uses deterministic calculations for comparisons and anomaly checks.",
+    tags: ["Document AI", "Pydantic", "Python", "FastAPI", "Validation"],
+    liveUrl: "https://quotation-analyzer-9m4i.onrender.com",
+    githubUrl: "https://github.com/AsaifAli/quotation-analyzer",
+    detailsUrl: "/projects/quotesense",
+  },
+];
 
-export default async function Home() {
-  const projects = await getProjects();
-  const featuredOrder = ["evidenceflow", "legacylens", "flowpilot"];
-  const featured = featuredOrder.map((slug) => projects.find((project) => project.slug === slug)).filter(Boolean) as typeof projects;
-  const remaining = projects.filter((project) => !featured.some((item) => item.slug === project.slug));
+const operatingPatterns = [
+  {
+    number: "01",
+    title: "Information is difficult to retrieve",
+    context:
+      "Knowledge lives across files, policies, project material, and internal systems.",
+    response:
+      "Search and retrieval systems that preserve source context and make evidence inspectable.",
+    service: "Knowledge and RAG systems",
+    href: "/services/knowledge-and-rag-systems",
+  },
+  {
+    number: "02",
+    title: "Documents create repetitive work",
+    context:
+      "People repeatedly extract, validate, compare, or re-enter information from documents.",
+    response:
+      "Document intelligence pipelines that produce structured information for review and downstream use.",
+    service: "Document intelligence",
+    href: "/services/document-intelligence",
+  },
+  {
+    number: "03",
+    title: "Processes span tools and people",
+    context:
+      "Work crosses APIs, teams, approval steps, and systems with fragmented state.",
+    response:
+      "Integrated workflows with explicit stages, exception handling, and controlled actions.",
+    service: "Agentic workflows and automation",
+    href: "/services/agentic-workflow-systems",
+  },
+];
 
+const principles = [
+  {
+    title: "Define the boundary",
+    copy: "Identify what the system can access, decide, and change. Keep permissions and responsibilities explicit.",
+  },
+  {
+    title: "Keep critical rules testable",
+    copy: "Use deterministic application logic for calculations, validation, permissions, and other rules that should not depend on model interpretation.",
+  },
+  {
+    title: "Evaluate representative behaviour",
+    copy: "Test normal inputs, edge cases, weak evidence, integration failures, and the situations where the system should stop or ask for review.",
+  },
+  {
+    title: "Make ownership visible",
+    copy: "Agree on provider accounts, hosting, credentials, monitoring, operating costs, and handover before deployment.",
+  },
+];
+
+const questions = [
+  {
+    q: "What kind of work is a good fit?",
+    a: "AI applications, agentic workflows, knowledge retrieval, document processing, API-based automation, and evaluation of existing AI systems are relevant starting points. The initial discussion checks whether the problem is suitable for AI and whether the scope is clear enough to proceed.",
+  },
+  {
+    q: "Do you work with our existing tools and software?",
+    a: "Where supported APIs, access permissions, and integration options are available, the solution can be designed around the existing environment. Feasibility and dependencies are reviewed during scoping.",
+  },
+  {
+    q: "How are implementation and operating costs handled?",
+    a: "Implementation is scoped separately from model API usage, hosting, and third-party services. Account ownership and expected operating costs are discussed before deployment.",
+  },
+  {
+    q: "Can we use confidential data in the public demos?",
+    a: "No. Public demonstrations are for technical evaluation with synthetic or non-confidential information. Do not submit production credentials, customer records, confidential documents, or sensitive business information.",
+  },
+];
+
+export default function Home() {
   return (
-    <main>
-      <section className="shell hero-personal hero-refined">
-        <div className="hero-refined-grid hero-personal-simple hero-with-photo">
-          <div className="hero-refined-copy">
-            <h1>I’m Asaif Ali.</h1>
-            <h2 className="hero-lede">I build AI systems that hold up beyond the demo.</h2>
-            <div className="hero-actions">
-              <Link className="btn btn-primary" href="#about">A little about me</Link>
-              <Link className="text-link" href="#work">See my work <span aria-hidden="true">↗</span></Link>
-            </div>
-
-            <div className="hero-personal-note hero-human-note">
-              <p className="hero-note-kicker">Based in Chandigarh, India</p>
-              <p>I enjoy the space between experimentation and dependable software — trying things, learning fast, and making the next version better.</p>
-              <div className="hero-note-links">
-                <a href="https://www.linkedin.com/in/sk-asaif-ali-134873243" target="_blank" rel="noreferrer">LinkedIn ↗</a>
-                <a href="https://github.com/AsaifAli" target="_blank" rel="noreferrer">GitHub ↗</a>
-                {CONTACT_EMAIL && <a href={`mailto:${CONTACT_EMAIL}`}>Email ↗</a>}
+    <main className="studio-main">
+      <section className="studio-hero">
+        <div className="studio-container">
+          <div className="studio-hero-grid">
+            <div className="studio-hero-copy">
+              <p className="studio-eyebrow">
+                Applied AI / Product engineering / Integration
+              </p>
+              <h1>
+                AI systems, engineered around the way your business works.
+              </h1>
+              <p className="studio-hero-intro">
+                An independent engineering practice for teams working with
+                complex information, document-heavy processes, and multi-step
+                operations. We design and build the application, retrieval,
+                automation, and evaluation layers that make AI useful in
+                real workflows.
+              </p>
+              <div className="studio-hero-actions">
+                <Link className="studio-button studio-button-primary" href="/contact">
+                  Discuss a project <span aria-hidden="true">↗</span>
+                </Link>
+                <Link className="studio-inline-link" href="#systems">
+                  Explore engineering references <span aria-hidden="true">↓</span>
+                </Link>
+              </div>
+              <div className="studio-hero-meta">
+                <span>Independent practice</span>
+                <span>Direct founder involvement</span>
+                <span>India / Remote</span>
               </div>
             </div>
+
+            <aside className="studio-hero-panel" aria-label="Engineering scope">
+              <div className="studio-panel-topline">
+                <span className="studio-eyebrow">Engineering scope</span>
+                <span className="studio-mono">AE / FIELD NOTES 01</span>
+              </div>
+              <div className="studio-system-map">
+                <div className="studio-map-source">
+                  <span className="studio-map-label">OPERATING CONTEXT</span>
+                  <strong>People · Data · Systems</strong>
+                </div>
+                <div className="studio-map-flow"><span /></div>
+                <div className="studio-map-core">
+                  <div className="studio-core-mark">AE</div>
+                  <div>
+                    <span className="studio-map-label">ENGINEERING LAYER</span>
+                    <strong>Models · Rules · Orchestration</strong>
+                  </div>
+                </div>
+                <div className="studio-map-flow"><span /></div>
+                <div className="studio-map-outcomes">
+                  <div><span>01</span><strong>Useful applications</strong></div>
+                  <div><span>02</span><strong>Controlled workflows</strong></div>
+                  <div><span>03</span><strong>Inspectable outputs</strong></div>
+                </div>
+              </div>
+              <div className="studio-panel-foot">
+                <span>Technology follows the problem.</span>
+                <span>NOT THE OTHER WAY AROUND.</span>
+              </div>
+            </aside>
           </div>
 
-          {HERO_IMAGE_URL && (
-            <div className="hero-photo-frame" aria-label="Portrait of Asaif Ali">
-              <div className="hero-photo-placeholder">
-                <img
-                  src={HERO_IMAGE_URL}
-                  alt="Asaif Ali"
-                  className="hero-photo"
-                  loading="eager"
-                />
-              </div>
-            </div>
-          )}
+          <div className="studio-principle-strip">
+            <div><span>01</span><strong>Scope before build</strong></div>
+            <div><span>02</span><strong>Testable system behaviour</strong></div>
+            <div><span>03</span><strong>Explicit data boundaries</strong></div>
+            <div><span>04</span><strong>Transparent ownership</strong></div>
+          </div>
         </div>
       </section>
 
-      <section id="about" className="shell section about-section about-prominent">
-        <div className="about-intro-row">
-          <div className="section-kicker">About me</div>
-          <div className="about-intro-note">A little more about the person behind the projects.</div>
-        </div>
-        <div className="about-prominent-grid">
-          <h2>I like the part of engineering where an idea has to become real.</h2>
-          <div className="about-copy about-copy-large">
-            <p>I’m an AI/ML engineer who enjoys the space between experimentation and dependable software. I like trying new models and frameworks, but I’m equally interested in what happens after the interesting demo: messy inputs, incomplete evidence, long-running jobs, failure paths, evaluation, and the details that make a system trustworthy.</p>
-            <p>Most of my work revolves around building useful AI products — from retrieval and document intelligence to agentic workflows and AI-assisted software engineering. I care about clear interfaces, measurable behavior, and systems that can be explained to the person using them.</p>
-            <p>This site is a record of that work, but more importantly, it is a place to get a sense of how I think and what I enjoy building.</p>
-          </div>
-        </div>
-        <div className="about-beliefs about-beliefs-refined">
-          <div><span>01</span><strong>Curious first.</strong><p>I like learning by building, testing ideas, and getting close to the real problem.</p></div>
-          <div><span>02</span><strong>Practical always.</strong><p>A clever model is useful only when the surrounding system makes it dependable.</p></div>
-          <div><span>03</span><strong>Keep improving.</strong><p>Ship something real, learn from it, then make the next version better.</p></div>
-        </div>
-      </section>
-
-      <section id="experience" className="shell section experience-section experience-refined">
-        <div className="section-head editorial-head">
-          <div>
-            <div className="section-kicker">Experience &amp; focus</div>
-            <h2>The work I do professionally — and the things I’ve learned building it.</h2>
-          </div>
-          <p className="section-intro">My day job gives me real engineering problems to solve. Outside work, I take the ideas that stay with me and turn them into personal systems, experiments, and working products.</p>
-        </div>
-
-        <div className="experience-combined-grid">
-          <article className="experience-summary">
-            <div className="timeline-period">NOV 2024 — AUG 2026</div>
-            <h3>Software Engineer · AI/ML</h3>
-            <div className="experience-company">Bebo Technologies Pvt Ltd</div>
-            <div className="experience-summary-copy">
-              <p>I work on AI/ML systems that sit close to real product and engineering problems — building automation, retrieval and agentic workflows, and the infrastructure around them. A lot of the work is less about choosing a model and more about making the whole system behave well: connecting APIs and data sources, structuring context, validating outputs, handling failure paths, and creating interfaces that people can actually use.</p>
-              <p>Over time, that has led me deeper into agentic systems, RAG, multi-agent orchestration, application modernization, and AI-assisted engineering. I enjoy the point where a promising experiment becomes a dependable piece of software — and I’ve learned to think about evaluation, persistence, observability, deployment, and edge cases as part of the product rather than afterthoughts.</p>
-              <p>The personal projects on this site grow out of that same curiosity. They are where I get to ask, <em>“What would this look like if I took the idea a little further?”</em></p>
-            </div>
-          </article>
-
-          <div className="experience-focus-grid experience-focus-grid-combined">
-            <div><span>01</span><strong>Agentic systems</strong><p>RAG, tool use, orchestration, memory, and multi-agent workflows around real application problems.</p></div>
-            <div><span>02</span><strong>Engineering around models</strong><p>APIs, validation, retrieval, evaluation, persistence, deployment, and the pieces that make AI usable.</p></div>
-            <div><span>03</span><strong>From idea to software</strong><p>Taking an experiment beyond the demo and thinking through quality, failure paths, and operations.</p></div>
-          </div>
-        </div>
-
-        <div className="work-tools work-tools-combined">
-          <div className="work-tools-head">
+      <section className="studio-section studio-context-section" id="capabilities">
+        <div className="studio-container">
+          <div className="studio-section-heading">
             <div>
-              <div className="section-kicker">What I work with</div>
-              <h3>The practical stack</h3>
-              <p>I keep the toolkit flexible. The common thread is Python, modern LLM tooling, retrieval, APIs, and cloud infrastructure.</p>
+              <p className="studio-eyebrow">01 / Operating context</p>
+              <h2>Start with the work that needs to move forward.</h2>
             </div>
-            {/* <p>I keep the toolkit flexible. The common thread is Python, modern LLM tooling, retrieval, APIs, and cloud infrastructure.</p> */}
+            <p>
+              Applied AI is not the starting point by default. First identify
+              the process, its constraints, and the part of the work that
+              would benefit from better software.
+            </p>
           </div>
-          <div className="toolkit-lines">
-            <div><span>AI &amp; LLMs</span><strong>Generative AI · Agentic AI · OpenAI API · Gemini API</strong></div>
-            <div><span>Agent systems</span><strong>LangGraph · LangChain · Agno · CrewAI</strong></div>
-            <div><span>Retrieval &amp; search</span><strong>OpenSearch · BM25 · Sparse retrieval · RRF · Jina · Tavily</strong></div>
-            <div><span>Backend &amp; data</span><strong>Python · FastAPI · REST APIs · SQL · PostgreSQL · Redis</strong></div>
-            <div><span>Infrastructure</span><strong>Docker · Supabase · Vercel · Render · AWS</strong></div>
+
+          <div className="studio-context-list">
+            {operatingPatterns.map((item) => (
+              <article className="studio-context-row" key={item.number}>
+                <span className="studio-index">{item.number}</span>
+                <div className="studio-context-problem">
+                  <h3>{item.title}</h3>
+                  <p>{item.context}</p>
+                </div>
+                <div className="studio-context-response">
+                  <p>{item.response}</p>
+                  <Link href={item.href}>
+                    {item.service} <span aria-hidden="true">↗</span>
+                  </Link>
+                </div>
+              </article>
+            ))}
           </div>
         </div>
       </section>
 
-      <section id="work" className="shell section work-section work-refined">
-        <div className="section-head editorial-head">
-          <div><div className="section-kicker">Selected personal builds</div><h2>A few things I’ve built outside the day job.</h2></div>
-          <p className="section-intro">These are the projects where I give myself room to explore a problem, test an idea, and take it far enough to become a real working system.</p>
-        </div>
-        <ProjectCarousel projects={featured.concat(remaining)} />
-
-        <div className="engineering-hub-callout">
-          <div className="engineering-hub-copy">
-            <div className="section-kicker">Built beyond the individual projects</div>
-            <h3>AI Engineering Hub</h3>
-            <p>One reusable engineering layer across five AI systems — with project adapters, task-specific evaluation, LLMOps telemetry, guardrails, human approval, regression gates, and n8n orchestration.</p>
-            <div className="engineering-hub-points" aria-label="AI Engineering Hub capabilities">
-              <span>5 AI systems</span>
-              <span>Task-specific evals</span>
-              <span>LLMOps telemetry</span>
-              <span>Guardrails + HITL</span>
-              <span>CI regression gates</span>
-              <span>n8n orchestration</span>
+      <section className="studio-section studio-services-section" id="services">
+        <div className="studio-container">
+          <div className="studio-section-heading">
+            <div>
+              <p className="studio-eyebrow">02 / Engineering capabilities</p>
+              <h2>One connected discipline, across the full system.</h2>
             </div>
+            <p>
+              Services are organised around the engineering work required to
+              make a solution usable: application design, workflow logic,
+              retrieval, data handling, evaluation, and integration.
+            </p>
           </div>
-          <a
-            className="btn btn-primary engineering-hub-button"
-            href="https://ai-engineering-evaluation-harness.onrender.com"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Explore the AI Engineering Hub in a new tab"
-          >
-            Explore the AI Engineering Hub <span aria-hidden="true">↗</span>
-          </a>
+
+          <div className="studio-service-list">
+            {services.map((service) => (
+              <Link
+                className="studio-service-row"
+                href={`/services/${service.slug}`}
+                key={service.slug}
+              >
+                <span className="studio-index">{service.number}</span>
+                <div className="studio-service-title">
+                  <span>{service.eyebrow}</span>
+                  <h3>{service.title}</h3>
+                </div>
+                <p>{service.summary}</p>
+                <span className="studio-service-arrow" aria-hidden="true">↗</span>
+              </Link>
+            ))}
+          </div>
+          <div className="studio-section-tail">
+            <Link className="studio-text-action" href="/services">
+              View all capabilities <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
         </div>
       </section>
 
-      <section id="contact" className="shell section contact-section contact-refined">
-        <div className="contact-intro">
-          <div className="section-kicker">Get in touch</div>
-          <h2>Interested in working together?</h2>
-          <p>For a role, collaboration, or just a technical conversation, I’d be happy to hear from you.</p>
+      <section className="studio-section studio-systems-section" id="systems">
+        <div className="studio-container">
+          <div className="studio-section-heading">
+            <div>
+              <p className="studio-eyebrow">03 / Engineering references</p>
+              <h2>Working systems. Open to technical inspection.</h2>
+            </div>
+            <p>
+              Independent builds that demonstrate specific engineering
+              approaches. They are not client case studies or claims about
+              deployed customer outcomes.
+            </p>
+          </div>
+          <InteractiveDemo projects={demos} />
         </div>
-        <div className="contact-direct contact-direct-stack" aria-label="Direct contact links">
-          {CONTACT_EMAIL && (
-            <a className="direct-contact contact-link-row" href={`mailto:${CONTACT_EMAIL}`}>
-              <span><small>EMAIL</small><strong>Email me</strong></span><span aria-hidden="true">↗</span>
-            </a>
-          )}
-          <a className="direct-contact contact-link-row" href="https://www.linkedin.com/in/sk-asaif-ali-134873243" target="_blank" rel="noreferrer">
-            <span><small>LINKEDIN</small><strong>Connect with me on LinkedIn</strong></span><span aria-hidden="true">↗</span>
-          </a>
-          <a className="direct-contact contact-link-row" href="https://github.com/AsaifAli" target="_blank" rel="noreferrer">
-            <span><small>GITHUB</small><strong>See what I’m building</strong></span><span aria-hidden="true">↗</span>
-          </a>
+      </section>
+
+      <section className="studio-section studio-approach-preview">
+        <div className="studio-container">
+          <div className="studio-section-heading">
+            <div>
+              <p className="studio-eyebrow">04 / Engineering approach</p>
+              <h2>Make the system understandable before making it autonomous.</h2>
+            </div>
+            <p>
+              A good implementation has clear boundaries, explicit failure
+              behaviour, and an agreed definition of what “working” means.
+            </p>
+          </div>
+          <div className="studio-principle-grid">
+            {principles.map((item, index) => (
+              <article key={item.title}>
+                <span className="studio-index">0{index + 1}</span>
+                <h3>{item.title}</h3>
+                <p>{item.copy}</p>
+              </article>
+            ))}
+          </div>
+          <div className="studio-section-tail">
+            <Link className="studio-text-action" href="/approach">
+              Understand the engagement model <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="studio-founder-band">
+        <div className="studio-container studio-founder-inner">
+          <div>
+            <p className="studio-eyebrow">05 / The practice</p>
+            <h2>
+              Direct engineering engagement. Clear ownership from the first
+              conversation.
+            </h2>
+          </div>
+          <div>
+            <p>
+              AI Engineering Studio is an independent practice led by Asaif
+              Ali. Project discussions, technical scoping, and implementation
+              stay directly connected to the engineer responsible for the
+              work. The practice takes on work where the problem, scope, and
+              delivery responsibilities can be understood clearly.
+            </p>
+            <Link className="studio-text-action" href="/studio">
+              About the studio <span aria-hidden="true">↗</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="studio-section studio-faq-section">
+        <div className="studio-container studio-faq-layout">
+          <div>
+            <p className="studio-eyebrow">06 / Common questions</p>
+            <h2>Practical details before an engagement.</h2>
+          </div>
+          <div className="studio-faq-list">
+            {questions.map((item) => (
+              <details className="studio-faq-item" key={item.q}>
+                <summary>{item.q}<span aria-hidden="true">+</span></summary>
+                <p>{item.a}</p>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="studio-contact-cta">
+        <div className="studio-container studio-contact-cta-inner">
+          <div>
+            <p className="studio-eyebrow">07 / Project enquiry</p>
+            <h2>Have a workflow worth engineering properly?</h2>
+            <p>
+              Share the operating problem and the systems involved. A detailed
+              technical specification is not required to start the discussion.
+            </p>
+          </div>
+          <Link className="studio-button studio-button-primary" href="/contact">
+            Start a conversation <span aria-hidden="true">↗</span>
+          </Link>
         </div>
       </section>
     </main>

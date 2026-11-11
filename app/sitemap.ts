@@ -1,4 +1,29 @@
 import type { MetadataRoute } from "next";
-import { projects } from "@/lib/projects";
+import { services } from "@/lib/services";
+
 const SITE_URL = "https://asaifali-portfolio.vercel.app";
-export default function sitemap(): MetadataRoute.Sitemap { return [{ url: `${SITE_URL}/`, changeFrequency: "weekly", priority: 1 }, ...projects.map(project => ({ url: `${SITE_URL}/projects/${project.slug}`, changeFrequency: "monthly" as const, priority: .8 }))]; }
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const staticRoutes = [
+    "",
+    "/services",
+    "/approach",
+    "/studio",
+    "/contact",
+  ];
+
+  const serviceRoutes = services.map(
+    (service) => `/services/${service.slug}`,
+  );
+
+  const projectRoutes = [
+    "/projects/evidenceflow",
+    "/projects/quotesense",
+  ];
+
+  return [...staticRoutes, ...serviceRoutes, ...projectRoutes].map((path) => ({
+    url: `${SITE_URL}${path}`,
+    changeFrequency: path === "" ? "weekly" : "monthly",
+    priority: path === "" ? 1 : path === "/services" ? 0.85 : 0.7,
+  }));
+}

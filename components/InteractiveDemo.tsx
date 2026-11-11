@@ -1,52 +1,71 @@
+
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { useAISession } from "./AISessionProvider";
 
-const providers = [
-  { id: "openrouter", label: "OpenRouter", placeholder: "openai/gpt-oss-20b:free" },
-  { id: "google", label: "Google Gemini", placeholder: "gemini-3.5-flash-lite" },
-  { id: "openai", label: "OpenAI", placeholder: "gpt-5-mini" },
-  { id: "anthropic", label: "Anthropic", placeholder: "claude-..." },
-] as const;
+type ProviderId =
+  | "openrouter"
+  | "google"
+  | "openai"
+  | "anthropic";
 
-type ProviderId = (typeof providers)[number]["id"];
-type Props = {
-  project: string;
-  title?: string;
-  description?: string;
-  mode?: "manager" | "status";
-  liveUrl?: string;
+type ProviderOption = {
+  id: ProviderId;
+  label: string;
+  placeholder: string;
 };
+
+export type DemoProject = {
+  slug: string;
+  name: string;
+  category: string;
+  description: string;
+  tags: string[];
+  liveUrl: string;
+  githubUrl: string;
+  detailsUrl: string;
+};
+
+type Props = {
+  projects: DemoProject[];
+};
+
+const providers: ProviderOption[] = [
+  {
+    id: "openrouter",
+    label: "OpenRouter",
+    placeholder: "openai/gpt-oss-20b:free",
+  },
+  {
+    id: "google",
+    label: "Google Gemini",
+    placeholder: "gemini-3.5-flash-lite",
+  },
+  {
+    id: "openai",
+    label: "OpenAI",
+    placeholder: "gpt-5-mini",
+  },
+  {
+    id: "anthropic",
+    label: "Anthropic",
+    placeholder: "claude-...",
+  },
+];
 
 const HANDOFF_PARAM = "portfolio_llm_session";
 
-const PROJECT_LIVE_URLS: Record<string, string> = {
-  legacylens: "https://ai-code-modernization-ui.onrender.com",
-  evidenceflow: "https://langgraph-rag-hdkn.onrender.com",
-  quotesense: "https://quotation-analyzer-9m4i.onrender.com",
-  flowpilot: "https://ai-automation-ui-ac2c.onrender.com",
-  webqa_intelligence: "https://web-crawler-agent.onrender.com",
-};
-
-function resolveLiveUrl(project: string, liveUrl?: string) {
-  return liveUrl?.trim() || PROJECT_LIVE_URLS[project.toLowerCase()] || "";
-}
-
 function buildLaunchUrl(liveUrl: string, token: string) {
   const target = new URL(liveUrl);
+
   target.searchParams.set(HANDOFF_PARAM, token);
+
   return target.toString();
 }
 
-export function InteractiveDemo({
-  project,
-  title = "Try the interactive demo",
-  description,
-  mode = "manager",
-  liveUrl = "",
-}: Props) {
+export function InteractiveDemo({ projects }: Props) {
   const {
     token,
     provider: activeProvider,
@@ -61,154 +80,308 @@ export function InteractiveDemo({
   const [provider, setProvider] = useState<ProviderId>("google");
   const [model, setModel] = useState("gemini-3.5-flash-lite");
   const [apiKey, setApiKey] = useState("");
+
   const selectedProvider = useMemo(
-    () => providers.find((item) => item.id === provider) ?? providers[0],
+    () =>
+      providers.find((item) => item.id === provider) ??
+      providers[0],
     [provider],
   );
-  const resolvedLiveUrl = resolveLiveUrl(project, liveUrl);
 
-  const launchDemo = () => {
-    if (!token || !resolvedLiveUrl) return;
-    window.open(buildLaunchUrl(resolvedLiveUrl, token), "_blank", "noopener,noreferrer");
+  const handleConnect = async (
+    event: FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    await createSession({
+      provider,
+      model,
+      apiKey,
+    });
+
+    // Do not clear the key here. If the gateway rejects the
+    // request, the user can correct the issue and retry.
   };
 
-  if (mode === "status") {
-    return (
-      <section className="demo-panel demo-session-status" aria-labelledby={`${project}-session-title`}>
-        <div className="demo-header">
-          <div>
-            <div className="section-kicker">Interactive demo · BYOK</div>
-            <h3 id={`${project}-session-title`}>
-              {token ? `Try ${project === "portfolio" ? "this project" : "this project"} live` : "Connect your AI session"}
-            </h3>
-            <p className="demo-copy">
-              {token
-                ? `Your temporary ${activeProvider} / ${activeModel} session is ready. Open the live project below to use it.`
-                : "Bring your own provider key to create a short-lived session for this project. The portfolio does not store the credential."}
-            </p>
-          </div>
-          <span className={`demo-status ${token ? "demo-status-ready" : "demo-status-idle"}`}>
-            {token ? "Session active" : "No session"}
-          </span>
-        </div>
+  const launchProject = (project: DemoProject) => {
+    if (!token || !project.liveUrl) {
+      return;
+    }
 
-        {token ? (
-          <div className="shared-session-card shared-session-card-active">
-            <div className="shared-session-copy">
-              <div className="shared-session-label">Portfolio AI session</div>
-              <strong>{activeProvider} · {activeModel}</strong>
-              <p>Active in this browser session. Your provider API key is not stored by the portfolio.</p>
-            </div>
-            <div className="demo-actions-buttons demo-session-buttons demo-session-buttons-active">
-              <button
-                className="btn btn-primary demo-launch-btn"
-                type="button"
-                onClick={launchDemo}
-                disabled={!resolvedLiveUrl}
-                title={resolvedLiveUrl ? "Open the live project with this session" : "Demo deployment URL is not configured"}
-              >
-                Open project ↗
-              </button>
-              <button className="btn btn-session-end" type="button" onClick={() => void revokeSession()}>
-                End session
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="demo-actions">
-            <div className="demo-footnote">
-              One session · reusable across project pages · provider key never stored
-            </div>
-            <Link className="btn btn-secondary" href="/#work">
-              Configure session →
-            </Link>
-          </div>
-        )}
-      </section>
+    window.open(
+      buildLaunchUrl(project.liveUrl, token),
+      "_blank",
+      "noopener,noreferrer",
     );
-  }
+  };
 
   return (
     <section
-      className="demo-panel"
-      id={project === "portfolio" ? undefined : `${project}-demo`}
-      aria-labelledby={`${project}-demo-title`}
+      className="demo-workbench"
+      aria-label="Live demonstration access"
     >
-      <div className="demo-header">
+      <div className="demo-workbench-intro">
         <div>
-          <div className="section-kicker">Interactive demo · BYOK</div>
-          <h3 id={`${project}-demo-title`}>{title}</h3>
-          <p className="demo-copy">
-            {description ?? "Bring your own provider key once. The credential creates a short-lived portfolio session and is not stored by the portfolio."}
+          <p className="studio-eyebrow">
+            Live demonstrations
           </p>
+
+          <h3>One connection. The systems below.</h3>
         </div>
-        {hydrated && (
-          <span className={`demo-status ${token ? "demo-status-ready" : creating ? "demo-status-creating" : "demo-status-idle"}`}>
-            {token ? "Session active" : creating ? "Connecting…" : "Ready to connect"}
-          </span>
-        )}
+
+        <p>
+          Connect a provider once. Use that temporary
+          session to open either demonstration in a new tab.
+        </p>
       </div>
 
-      {token ? (
-        <div className="shared-session-card shared-session-card-active">
-          <div className="shared-session-copy">
-            <div className="shared-session-label">Portfolio AI session</div>
-            <strong>{activeProvider} · {activeModel}</strong>
-            <p>Active across the portfolio in this browser session. Your provider API key is not stored.</p>
-          </div>
-          <div className="demo-actions-buttons demo-session-buttons demo-session-buttons-active">
-            <button
-              className="btn btn-primary demo-launch-btn"
-              type="button"
-              onClick={launchDemo}
-              disabled={!resolvedLiveUrl}
-              title={resolvedLiveUrl ? "Open the live project with this session" : "Demo deployment URL is not configured"}
+      <div className="demo-workbench-grid">
+        <aside className="demo-access-panel">
+          <div className="demo-panel-heading">
+            <p className="studio-eyebrow">
+              Demo access
+            </p>
+
+            <span
+              className={`demo-connection-indicator ${
+                token ? "is-connected" : ""
+              }`}
             >
-              Open project ↗
-            </button>
-            <button className="btn btn-session-end" type="button" onClick={() => void revokeSession()}>
-              End session
-            </button>
-            {project === "portfolio" && <Link className="btn btn-secondary" href="#work">Choose a project →</Link>}
+              <span aria-hidden="true" />
+
+              {hydrated
+                ? token
+                  ? "Connected"
+                  : "Not connected"
+                : "Checking session"}
+            </span>
           </div>
-        </div>
-      ) : (
-        <>
-          <div className="demo-grid">
-            <div className="field">
-              <label htmlFor={`${project}-provider`}>Provider</label>
-              <select
-                id={`${project}-provider`}
-                value={provider}
-                onChange={(event) => {
-                  const next = event.target.value as ProviderId;
-                  setProvider(next);
-                  const item = providers.find((candidate) => candidate.id === next);
-                  if (item) setModel(item.placeholder);
-                }}
+
+          {token ? (
+            <div className="demo-session-active">
+              <div
+                className="demo-session-check"
+                aria-hidden="true"
               >
-                {providers.map((item) => <option key={item.id} value={item.id}>{item.label}</option>)}
-              </select>
+                ✓
+              </div>
+
+              <h4>Provider connected</h4>
+
+              <p className="demo-session-model">
+                {activeProvider} · {activeModel}
+              </p>
+
+              <p>
+                This short-lived session can be used to
+                launch any demonstration shown here. It
+                expires automatically or can be ended now.
+              </p>
+
+              <button
+                className="demo-secondary-button"
+                type="button"
+                onClick={() => void revokeSession()}
+              >
+                End session
+              </button>
             </div>
-            <div className="field">
-              <label htmlFor={`${project}-model`}>Model ID</label>
-              <input id={`${project}-model`} value={model} onChange={(event) => setModel(event.target.value)} placeholder={selectedProvider.placeholder} spellCheck={false} />
-            </div>
-            <div className="field demo-key-field">
-              <label htmlFor={`${project}-api-key`}>Provider API key</label>
-              <input id={`${project}-api-key`} type="password" value={apiKey} onChange={(event) => setApiKey(event.target.value)} placeholder={`Paste your ${selectedProvider.label} key`} autoComplete="off" spellCheck={false} />
-              <span className="field-hint">Used once to create the temporary portfolio session. It is not stored by the portfolio.</span>
-            </div>
+          ) : (
+            <form
+              className="demo-connect-form"
+              onSubmit={handleConnect}
+            >
+              <p className="demo-form-intro">
+                Use your own provider account and API key.
+                Your key is sent to the configured gateway
+                for temporary encrypted session use.
+              </p>
+
+              <div className="demo-field">
+                <label htmlFor="demo-provider">
+                  Provider
+                </label>
+
+                <select
+                  id="demo-provider"
+                  value={provider}
+                  onChange={(event) => {
+                    const nextProvider =
+                      event.target.value as ProviderId;
+
+                    setProvider(nextProvider);
+
+                    const nextOption = providers.find(
+                      (item) => item.id === nextProvider,
+                    );
+
+                    if (nextOption) {
+                      setModel(nextOption.placeholder);
+                    }
+                  }}
+                >
+                  {providers.map((item) => (
+                    <option
+                      key={item.id}
+                      value={item.id}
+                    >
+                      {item.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="demo-field">
+                <label htmlFor="demo-model">
+                  Model ID
+                </label>
+
+                <input
+                  id="demo-model"
+                  value={model}
+                  onChange={(event) =>
+                    setModel(event.target.value)
+                  }
+                  placeholder={selectedProvider.placeholder}
+                  spellCheck={false}
+                  autoComplete="off"
+                  required
+                />
+              </div>
+
+              <div className="demo-field">
+                <label htmlFor="demo-api-key">
+                  API key
+                </label>
+
+                <input
+                  id="demo-api-key"
+                  type="password"
+                  value={apiKey}
+                  onChange={(event) =>
+                    setApiKey(event.target.value)
+                  }
+                  placeholder={`Your ${selectedProvider.label} API key`}
+                  autoComplete="off"
+                  spellCheck={false}
+                  required
+                />
+              </div>
+
+              {error && (
+                <p
+                  className="demo-form-error"
+                  role="alert"
+                >
+                  {error}
+                </p>
+              )}
+
+              <button
+                className="demo-connect-button"
+                type="submit"
+                disabled={creating}
+              >
+                {creating ? "Connecting…" : "Connect provider"}
+
+                <span aria-hidden="true">→</span>
+              </button>
+            </form>
+          )}
+
+          <div className="demo-security-note">
+            <strong>For evaluation only</strong>
+
+            <p>
+              Use synthetic or non-confidential information.
+              Do not submit production credentials, customer
+              records, or private business documents through
+              public demos.
+            </p>
           </div>
-          {error && <div className="notice demo-error" role="alert">{error}</div>}
-          <div className="demo-actions">
-            <div className="demo-footnote">One session · reusable across project pages · provider key never stored</div>
-            <button className="btn btn-primary" type="button" onClick={() => createSession({ provider, model, apiKey })} disabled={creating}>
-              {creating ? "Creating secure session…" : "Start portfolio AI session →"}
-            </button>
-          </div>
-        </>
-      )}
+        </aside>
+
+        <div className="demo-project-list">
+          {projects.map((project, index) => (
+            <article
+              className="demo-project-card"
+              key={project.slug}
+            >
+              <div className="demo-project-card-top">
+                <span className="studio-number">
+                  0{index + 1}
+                </span>
+
+                <span className="demo-project-category">
+                  {project.category}
+                </span>
+              </div>
+
+              <h4>{project.name}</h4>
+
+              <p>{project.description}</p>
+
+              <div
+                className="demo-project-tags"
+                aria-label={`${project.name} technologies`}
+              >
+                {project.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+
+              <div className="demo-project-actions">
+                <button
+                  className="demo-launch-button"
+                  type="button"
+                  onClick={() => launchProject(project)}
+                  disabled={!token || !project.liveUrl}
+                  title={
+                    !project.liveUrl
+                      ? "A live deployment is not configured"
+                      : token
+                        ? "Open this demonstration with the connected session"
+                        : "Connect a provider to enable this demonstration"
+                  }
+                >
+                  {token
+                    ? "Launch demonstration"
+                    : "Connect to launch"}
+
+                  <span aria-hidden="true">↗</span>
+                </button>
+
+                <div className="demo-project-secondary-links">
+                  {project.detailsUrl && (
+                    <Link href={project.detailsUrl}>
+                      Technical overview
+                    </Link>
+                  )}
+
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Source
+                    </a>
+                  )}
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+
+      <p className="demo-workbench-footnote">
+        The provider key is not written to browser storage.
+        The gateway encrypts it for temporary server-side
+        session use; only a short-lived session token is
+        kept in this browser session. Session duration and
+        security depend on the production gateway
+        configuration.
+      </p>
     </section>
   );
 }
