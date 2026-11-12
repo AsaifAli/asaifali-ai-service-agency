@@ -88,7 +88,7 @@ export default function TermsPage() {
             </p>
             <p>
               Requests may be sent to the AI provider selected in the
-              workbench. Your use is subject to that provider's terms,
+              workbench. Your use is subject to that provider&apos;s terms,
               acceptable-use requirements, privacy practices, rate limits,
               and service availability.
             </p>
@@ -118,7 +118,7 @@ export default function TermsPage() {
           <section>
             <h2>6. Intellectual property</h2>
             <p>
-              Unless stated otherwise, the website's original text,
+              Unless stated otherwise, the website&apos;s original text,
               branding, design, and code are owned by or used with
               permission by the studio. Third-party names, trademarks,
               frameworks, and services remain the property of their

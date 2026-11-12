@@ -154,7 +154,7 @@ export default function PrivacyPage() {
             </p>
             <p>
               Reasonable technical and organisational measures are used
-              for the services under the studio's control. No website,
+              for the services under the studio&apos;s control. No website,
               internet transmission, or third-party service can be
               guaranteed to be completely secure.
             </p>

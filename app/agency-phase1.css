@@ -559,3 +559,137 @@
     gap: 24px 18px;
   }
 }
+
+/* Provider select: consistent, vertically centred chevron */
+.demo-field select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-right: 42px;
+  background-color: #0b1117;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='m3.5 5.75 4.5 4.5 4.5-4.5' stroke='%23a7c6d1' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 13px center;
+  background-size: 14px 14px;
+  cursor: pointer;
+}
+
+/* More readable supporting typography */
+.studio-eyebrow,
+.studio-index,
+.studio-number {
+  font-size: 11px;
+}
+
+.studio-hero-meta span,
+.studio-principle-strip span {
+  font-size: 10px;
+}
+
+.studio-mono,
+.studio-map-label,
+.studio-panel-foot,
+.studio-map-outcomes span {
+  font-size: 9px;
+}
+
+.studio-map-outcomes strong,
+.studio-principle-strip strong {
+  font-size: 11px;
+}
+
+.studio-context-response a,
+.studio-back-link,
+.studio-social-links a,
+.studio-email-link {
+  font-size: 12px;
+}
+
+.studio-service-title > span {
+  font-size: 11px;
+}
+
+.demo-connection-indicator,
+.demo-project-category {
+  font-size: 10px;
+}
+
+.demo-connect-button,
+.demo-launch-button,
+.demo-secondary-button {
+  min-height: 44px;
+  font-size: 13px;
+}
+
+.demo-project-tags span,
+.studio-project-tags span {
+  font-size: 10px;
+}
+
+.demo-project-secondary-links a,
+.studio-project-links a,
+.studio-project-bottom-links a {
+  font-size: 12px;
+}
+
+.demo-security-note strong {
+  font-size: 10px;
+  letter-spacing: .08em;
+}
+
+.demo-security-note p,
+.demo-workbench-footnote,
+.demo-session-active > p:not(.demo-session-model) {
+  color: var(--studio-muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.demo-session-model {
+  font-size: 10px;
+}
+
+.demo-form-error {
+  font-size: 12px;
+}
+
+.studio-form-legal,
+.studio-legal-updated {
+  font-size: 12px !important;
+}
+
+.studio-offer-top,
+.studio-offer-fit > span,
+.studio-engagement-includes > span,
+.studio-engagement-outcome > span,
+.studio-founder-credentials span {
+  font-size: 10px;
+}
+
+.studio-offer-fit p,
+.studio-engagement-outcome strong,
+.studio-engagement-note p,
+.studio-commercial-note {
+  font-size: 13px;
+}
+
+.footer-identity > p,
+.footer-links a {
+  font-size: 12px;
+}
+
+.footer-label {
+  font-size: 10px;
+}
+
+.footer-bottom {
+  font-size: 10px;
+}
+
+@media (max-width: 600px) {
+  .demo-workbench-intro > p,
+  .demo-form-intro,
+  .demo-security-note p,
+  .demo-workbench-footnote {
+    font-size: 13px;
+  }
+}
