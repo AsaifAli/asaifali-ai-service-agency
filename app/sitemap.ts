@@ -1,7 +1,7 @@
+
 import type { MetadataRoute } from "next";
 import { services } from "@/lib/services";
-
-const SITE_URL = "https://asaifali-portfolio.vercel.app";
+import { SITE_URL } from "@/lib/seo";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes = [
@@ -10,6 +10,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/approach",
     "/studio",
     "/contact",
+    "/privacy",
+    "/terms",
   ];
 
   const serviceRoutes = services.map(
@@ -21,9 +23,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/projects/quotesense",
   ];
 
-  return [...staticRoutes, ...serviceRoutes, ...projectRoutes].map((path) => ({
-    url: `${SITE_URL}${path}`,
+  const allRoutes = [
+    ...staticRoutes,
+    ...serviceRoutes,
+    ...projectRoutes,
+  ];
+
+  return allRoutes.map((path) => ({
+    url: new URL(path, SITE_URL).toString(),
     changeFrequency: path === "" ? "weekly" : "monthly",
-    priority: path === "" ? 1 : path === "/services" ? 0.85 : 0.7,
+    priority:
+      path === ""
+        ? 1
+        : path === "/services"
+          ? 0.85
+          : path === "/privacy" || path === "/terms"
+            ? 0.3
+            : 0.7,
   }));
 }

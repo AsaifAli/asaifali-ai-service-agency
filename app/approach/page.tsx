@@ -1,11 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { studioMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata = studioMetadata({
   title: "Approach",
   description:
-    "How AI Engineering Studio scopes, designs, builds, evaluates, deploys, and hands over applied AI systems.",
-};
+    "How AI Engineering Studio assesses, scopes, builds, evaluates, and hands over applied AI systems.",
+  path: "/approach",
+});
+
 
 const phases = [
   {

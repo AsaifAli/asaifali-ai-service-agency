@@ -1,3 +1,4 @@
+
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AISessionProvider } from "@/components/AISessionProvider";
@@ -5,6 +6,7 @@ import { MobileNav } from "@/components/MobileNav";
 import { ScrollRestoration } from "@/components/ScrollRestoration";
 import "./globals.css";
 import "./agency.css";
+import "./agency-phase1.css";
 
 const SITE_URL = "https://asaifali-portfolio.vercel.app";
 
@@ -26,7 +28,6 @@ export const metadata: Metadata = {
     "Custom AI applications",
     "AI evaluation",
   ],
-  alternates: { canonical: "/" },
   openGraph: {
     title: "AI Engineering Studio | Applied AI, Built as Software",
     description:
@@ -42,7 +43,10 @@ export const metadata: Metadata = {
     description:
       "Independent applied AI engineering for workflows, knowledge systems, and custom software.",
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const nav: string[][] = [
@@ -92,6 +96,7 @@ export default function RootLayout({
               __html: JSON.stringify(professionalServiceJsonLd),
             }}
           />
+
           <ScrollRestoration />
 
           <header className="site-header">
@@ -104,6 +109,7 @@ export default function RootLayout({
                 <span className="brand-symbol" aria-hidden="true">
                   AE
                 </span>
+
                 <span className="brand-wordmark">
                   <strong>AI ENGINEERING</strong>
                   <small>INDEPENDENT STUDIO</small>
@@ -119,7 +125,8 @@ export default function RootLayout({
               </nav>
 
               <Link className="nav-cta" href="/contact">
-                Start a conversation <span aria-hidden="true">↗</span>
+                Start a conversation{" "}
+                <span aria-hidden="true">↗</span>
               </Link>
 
               <MobileNav nav={nav} />
@@ -135,14 +142,16 @@ export default function RootLayout({
                   <span className="brand-symbol" aria-hidden="true">
                     AE
                   </span>
+
                   <span>
                     <strong>AI ENGINEERING STUDIO</strong>
                     <small>INDEPENDENT APPLIED AI PRACTICE</small>
                   </span>
                 </Link>
+
                 <p>
-                  Applied AI, engineered around real workflows. Directly led
-                  by Asaif Ali.
+                  Applied AI, engineered around real workflows. Directly
+                  led by Asaif Ali.
                 </p>
               </div>
 
@@ -151,12 +160,15 @@ export default function RootLayout({
                   <span className="footer-label">Explore</span>
                   <Link href="/services">Services</Link>
                   <Link href="/approach">Approach</Link>
+                  <Link href="/#solutions">Signature solutions</Link>
                   <Link href="/#systems">Engineering references</Link>
                 </div>
+
                 <div>
                   <span className="footer-label">Connect</span>
                   <Link href="/studio">The studio</Link>
                   <Link href="/contact">Project enquiry</Link>
+
                   <a
                     href="https://github.com/AsaifAli"
                     target="_blank"
@@ -164,6 +176,7 @@ export default function RootLayout({
                   >
                     GitHub ↗
                   </a>
+
                   <a
                     href="https://www.linkedin.com/in/sk-asaif-ali-134873243"
                     target="_blank"
@@ -172,13 +185,23 @@ export default function RootLayout({
                     LinkedIn ↗
                   </a>
                 </div>
+
+                <div>
+                  <span className="footer-label">Information</span>
+                  <Link href="/privacy">Privacy</Link>
+                  <Link href="/terms">Terms of use</Link>
+                </div>
               </div>
             </div>
 
             <div className="studio-container footer-bottom">
-              <span>© {new Date().getFullYear()} AI Engineering Studio</span>
+              <span>
+                © {new Date().getFullYear()} AI Engineering Studio
+              </span>
               <span>Independent practice · India / Remote</span>
-              <span>Scope clearly. Engineer carefully. Hand over transparently.</span>
+              <span>
+                Scope clearly. Engineer carefully. Hand over transparently.
+              </span>
             </div>
           </footer>
         </AISessionProvider>
