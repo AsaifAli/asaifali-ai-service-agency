@@ -1,55 +1,35 @@
-# Asaif Ali — AI/ML Engineering Portfolio
+# AI Engineering Studio
 
-A personal AI/ML engineering portfolio built with **Next.js 16, React 19, Supabase, and Vercel**. The site leads with Asaif, his experience, and selected work; the interactive AI demonstrations remain an optional playground.
+A founder-led applied AI engineering practice focused on document intelligence, business knowledge systems and multi-step workflow automation.
 
-**Live portfolio:** https://asaifali-portfolio.vercel.app
+**Website:** https://asaifali-portfolio.vercel.app
 
-## What the portfolio showcases
+The website presents service capabilities and independent engineering references. Public project references are demonstrations of implementation approaches; they are not client case studies or claims about customer deployments.
 
-The portfolio presents five deployed AI engineering projects:
+## What the studio builds
 
-| Project | Focus | Live demo |
+- **Document intelligence:** document ingestion, structured extraction, validation, deterministic comparisons and reviewable outputs.
+- **Knowledge systems:** document ingestion, search, retrieval, reranking, evidence-grounded answers and evaluation.
+- **Agentic workflow systems:** stateful orchestration, tool integrations, approval boundaries, exception handling and controlled automation.
+- **Supporting engineering:** AI application engineering, API integration, AI evaluation and reliability.
+
+## Selected independent systems
+
+The public website focuses on two flagship builds rather than presenting a broad catalogue.
+
+| System | Focus | Repository |
 |---|---|---|
-| LegacyLens | Agentic software modernization · planning · context-grounded conversion · validation | https://ai-code-modernization-ui.onrender.com |
-| FlowPilot | Agentic automation | https://ai-automation-ui-ac2c.onrender.com |
-| EvidenceFlow | Verified RAG and research | https://langgraph-rag-hdkn.onrender.com |
-| QuoteSense | Procurement/document intelligence | https://quotation-analyzer-9m4i.onrender.com |
-| WebQA | AI-assisted web QA | https://web-crawler-agent.onrender.com |
-
-## Contact system
-
-Recruiters can contact Asaif directly through the configured email button, LinkedIn, or the portfolio contact form. The form stores messages in Supabase when configured and can optionally send an email notification through Resend when `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, and `CONTACT_FROM_EMAIL` are configured.
-
-## Interactive demo architecture
-
-The interactive projects use a shared OpenAI-compatible LLM Gateway so users can bring their own supported provider key without exposing that provider credential to an individual project frontend.
-
-```text
-Portfolio
-   ↓
-BYOK session creation
-   ↓
-Redis-backed temporary session
-   ↓
-Short-lived JWT
-   ↓
-Selected project
-   ↓
-Portfolio LLM Gateway
-   ↓
-User-selected provider/model
-```
-
-Provider credentials remain server-side. Projects receive a temporary gateway session token rather than the provider API key.
+| QuoteSense | Procurement and quotation intelligence | https://github.com/AsaifAli/quotation-analyzer |
+| EvidenceFlow | Evidence-grounded RAG and research | https://github.com/AsaifAli/LangGraph-RAG |
 
 ## Stack
 
-- Next.js 16
-- React 19
-- Supabase Postgres + Auth
-- `@supabase/ssr`
+- Next.js App Router and React
+- TypeScript
+- Supabase Postgres and Auth
+- Supabase SSR
 - Vercel
-- Shared Portfolio LLM Gateway
+- Shared AI gateway for optional bring-your-own-key demonstrations
 
 ## Local development
 
@@ -59,56 +39,38 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open http://localhost:3000.
 
-The public site includes built-in project data so the UI can run before Supabase is configured. When Supabase variables are present, published project content is read from Supabase.
+The public site uses built-in project data when Supabase is unavailable. When Supabase is configured and seeded, published project copy is loaded from the `projects` table. The contact form can store enquiries in Supabase and send studio email notifications through Resend.
 
 ## Supabase setup
 
 1. Create a Supabase project.
 2. Run `supabase/schema.sql`.
 3. Run `supabase/seed.sql`.
-4. Create the portfolio admin user in Supabase Auth.
-5. Configure the Supabase URL and publishable key in `.env.local` and Vercel.
+4. Apply the migrations in `supabase/migrations/` in order.
+5. Create the owner user in Supabase Auth.
+6. Set the owner's trusted **App Metadata** to `{"studio_role":"admin"}`.
+7. Configure the public Supabase URL and publishable key in Vercel.
 
-## Deployment
+Never set `studio_role` in editable User Metadata. Never expose a Supabase service-role key in browser code.
 
-The portfolio is deployed on Vercel from the `main` branch. The repository is intended to remain directly deployable with the standard Next.js build settings.
+## Contact delivery
 
-## Project repository links
+Configure `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` and `CONTACT_RATE_LIMIT_SECRET` as server-side environment variables. The sender address/domain must be verified with Resend. The app stores enquiries in Supabase and exposes an admin-only inbox at `/admin/leads`.
 
-- LegacyLens: https://github.com/AsaifAli/AI-Code-Modernization-Platform
-- FlowPilot: https://github.com/AsaifAli/AI-Automation-Command-Center
-- EvidenceFlow: https://github.com/AsaifAli/LangGraph-RAG
-- QuoteSense: https://github.com/AsaifAli/quotation-analyzer
-- WebQA: https://github.com/AsaifAli/web-crawler-agent
-- Shared LLM Gateway: https://github.com/AsaifAli/shared-Portfolio-LLM-Gateway
+## Optional live demonstrations
+
+The public homepage includes synthetic, no-key walkthroughs and an optional live BYOK workbench. The live workbench reuses the existing InteractiveDemo, AISessionProvider and shared LLM Gateway session flow. Use a test key with spend limits and synthetic or non-confidential information only.
+
+## Visual experience
+
+The site uses a dark-first theme with a persistent dark/light toggle and a restrained graphite-and-blue palette. The founder profile uses a locally hosted, optimized portrait.
 
 ## Engineering philosophy
 
-The portfolio is designed to show the engineering around AI, not just model calls:
+Technology follows the operating problem. Model-generated outputs are validated at application boundaries; deterministic business rules remain deterministic; evidence and uncertainty should be inspectable; and ownership, hosting, provider costs and handover responsibilities are agreed before production deployment.
 
-```text
-LLM / Agents
-      ↓
-Structured outputs
-      ↓
-Deterministic validation
-      ↓
-Evidence / quality gates
-      ↓
-Evaluation / observability
-      ↓
-Deployable application
-```
+## Ownership and client engagements
 
-## Security boundary
-
-- Provider API keys are not part of project source code.
-- BYOK credentials are handled through the shared gateway session architecture.
-- Supabase secrets stay in environment configuration.
-- Production secrets should never be committed to Git.
-
-## License
-
-MIT License.
+Each engagement is separately scoped with deliverables, acceptance criteria, fees, dependencies, data handling, intellectual-property terms, support and handover responsibilities agreed in writing.

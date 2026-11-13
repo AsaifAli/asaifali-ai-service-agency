@@ -1,2 +1,14 @@
 import type { MetadataRoute } from "next";
-export default function manifest(): MetadataRoute.Manifest { return { name: "Asaif Ali — AI/ML Engineer", short_name: "Asaif Ali", description: "Production-oriented AI systems across Generative AI, Agentic AI, RAG, automation, and LLM engineering.", start_url: "/", display: "standalone", background_color: "#0a0d12", theme_color: "#0a0d12", icons: [] }; }
+
+export default function manifest(): MetadataRoute.Manifest {
+  return {
+    name: "AI Engineering Studio",
+    short_name: "AI Engineering",
+    description: "Founder-led applied AI engineering for documents, knowledge and business workflows.",
+    start_url: "/",
+    display: "standalone",
+    background_color: "#0b0e14",
+    theme_color: "#0b0e14",
+    icons: [{ src: "/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }],
+  };
+}
