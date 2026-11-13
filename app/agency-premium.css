@@ -481,3 +481,9 @@ body, .studio-main h1, .studio-main h2, .studio-main h3, .studio-main h4, .studi
   .refresh-work-cover-image { transition: none; }
   .refresh-work-card:hover .refresh-work-cover-image { transform: none; }
 }
+.refresh-hero-secondary-links {
+  display: flex;
+  align-items: center;
+  column-gap: 24px;
+  row-gap: 12px;
+}
