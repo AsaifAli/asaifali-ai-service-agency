@@ -27,10 +27,10 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, message: "Thank you. Your enquiry has been received." });
   }
 
-  const name = clean(body.name, 120);
+  const name = clean(body.name, 120).replace(/[\r\n]+/g, " ");
   const email = clean(body.email, 320);
   const organization = clean(body.organization, 160);
-  const projectType = clean(body.project_type, 100);
+  const projectType = clean(body.project_type, 100).replace(/[\r\n]+/g, " ");
   const budgetRange = clean(body.budget_range, 80);
   const timeline = clean(body.timeline, 80);
   const message = clean(body.message, 5000);
@@ -49,8 +49,6 @@ export async function POST(request: Request) {
 
   let stored = false;
   let emailed = false;
-  let storageError = false;
-  let emailError = false;
 
   const supabase = createAdminClient();
 
@@ -62,13 +60,13 @@ export async function POST(request: Request) {
     || forwardedFor.split(",").at(-1)?.trim()
     || "";
   if (process.env.NODE_ENV === "production" && (!supabase || !rateSecret || !clientIp)) {
-    return NextResponse.json({ ok: false, error: "The enquiry form is temporarily unavailable. Please email the studio directly." }, { status: 503 });
+    return NextResponse.json({ ok: false, error: "The enquiry form is temporarily unavailable. Please try again later." }, { status: 503 });
   }
   if (supabase && rateSecret && clientIp) {
     const keyHash = createHash("sha256").update(`${rateSecret}:${clientIp}`).digest("hex");
     const { data: allowed, error: rateError } = await supabase.rpc("consume_contact_rate_limit", { p_key_hash: keyHash });
     if (rateError) {
-      return NextResponse.json({ ok: false, error: "The enquiry form could not verify its abuse-prevention check. Please email the studio directly." }, { status: 503 });
+      return NextResponse.json({ ok: false, error: "The enquiry form could not verify its abuse-prevention check. Please try again later." }, { status: 503 });
     }
     if (allowed === false) {
       return NextResponse.json({ ok: false, error: "Too many enquiries have been submitted from this connection. Please try again in about an hour." }, { status: 429 });
@@ -110,33 +108,11 @@ export async function POST(request: Request) {
         cache: "no-store",
       });
       emailed = response.ok;
-      emailError = !response.ok;
-      if (emailed) {
-        // Optional acknowledgement to the prospective client. Failure here does
-        // not turn a successfully delivered studio notification into an error.
-        try {
-          await fetch(RESEND_API, {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${resendKey}`,
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              from: fromEmail,
-              to: [email],
-              reply_to: toEmail,
-              subject: "We received your project enquiry",
-              text: `Hi ${name},\n\nThanks for contacting AI Engineering Studio. Your enquiry has reached the studio. We will review the workflow and reply to this email.\n\nFor your records, you selected: ${projectType}.\n\nPlease do not send passwords, API keys or confidential documents by email.\n\nAI Engineering Studio`,
-            }),
-            signal: AbortSignal.timeout(8_000),
-            cache: "no-store",
-          });
-        } catch {
-          // Client acknowledgement is best-effort; the studio notification was sent.
-        }
+      if (!response.ok) {
+        console.error("[contact] Studio notification email failed", { status: response.status });
       }
-    } catch {
-      emailError = true;
+    } catch (error) {
+      console.error("[contact] Studio notification email request failed", error instanceof Error ? error.name : "UnknownError");
     }
   }
 
@@ -153,37 +129,28 @@ export async function POST(request: Request) {
         notification_status: emailed ? "sent" : "pending",
       });
       stored = !error;
-      storageError = Boolean(error);
+      if (error) {
+        console.error("[contact] Lead storage failed", { code: error.code || "unknown" });
+      }
     } else {
-      storageError = true;
+      console.error("[contact] Lead storage unavailable: Supabase admin client is not configured");
     }
-  } catch {
-    storageError = true;
+  } catch (error) {
+    console.error("[contact] Lead storage request failed", error instanceof Error ? error.name : "UnknownError");
   }
 
   if (!stored && !emailed) {
     return NextResponse.json({
       ok: false,
-      error: "We could not confirm delivery of your enquiry. Please email the studio directly using the address shown on this page.",
+      error: "The enquiry could not be delivered. Please try again later or use another contact method shown on the page.",
     }, { status: 503 });
   }
 
-  let acknowledgement: string;
-  if (stored && emailed) {
-    acknowledgement = "Your enquiry has been recorded and an email notification has been sent to the studio. We’ll review it and reply by email.";
-  } else if (stored) {
-    acknowledgement = "Your enquiry has been saved in the studio inbox. An email alert could not be confirmed, so for time-sensitive requests please also email the studio directly.";
-  } else {
-    acknowledgement = "Your enquiry email has been delivered to the studio. We’ll review it and reply by email.";
-  }
+  const acknowledgement = stored && emailed
+    ? "Your enquiry has been recorded and the studio has been notified. I aim to reply within two business days."
+    : stored
+      ? "Your enquiry has been saved in the studio inbox. The email notification is pending; I aim to reply within two business days."
+      : "Your enquiry notification has been delivered to the studio. I aim to reply within two business days.";
 
-  return NextResponse.json({
-    ok: true,
-    stored,
-    emailed,
-    notificationPending: stored && !emailed,
-    storageError,
-    emailError,
-    message: acknowledgement,
-  });
+  return NextResponse.json({ ok: true, message: acknowledgement });
 }

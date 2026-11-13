@@ -14,13 +14,13 @@ export function SampleShowcase() {
         <p>These are illustrative, synthetic examples—not live customer data or performance claims. Use them to understand the workflow before opening the technical demos.</p>
       </div>
 
-      <div className="refresh-sample-tabs" role="tablist" aria-label="Sample walkthrough">
-        <button type="button" role="tab" aria-selected={active === "quotesense"} className={active === "quotesense" ? "is-active" : ""} onClick={() => setActive("quotesense")}>QuoteSense <span>01</span></button>
-        <button type="button" role="tab" aria-selected={active === "evidenceflow"} className={active === "evidenceflow" ? "is-active" : ""} onClick={() => setActive("evidenceflow")}>EvidenceFlow <span>02</span></button>
+      <div className="refresh-sample-tabs" role="group" aria-label="Choose a sample walkthrough">
+        <button type="button" aria-pressed={active === "quotesense"} className={active === "quotesense" ? "is-active" : ""} onClick={() => setActive("quotesense")}>QuoteSense <span>01</span></button>
+        <button type="button" aria-pressed={active === "evidenceflow"} className={active === "evidenceflow" ? "is-active" : ""} onClick={() => setActive("evidenceflow")}>EvidenceFlow <span>02</span></button>
       </div>
 
       {active === "quotesense" ? (
-        <div className="refresh-sample-panel" role="tabpanel" aria-label="QuoteSense synthetic example">
+        <div className="refresh-sample-panel" aria-label="QuoteSense synthetic example">
           <div className="refresh-sample-panel-top"><span className="refresh-sample-status"><i /> SYNTHETIC PROCUREMENT EXAMPLE</span><span>USD / THREE QUOTATIONS</span></div>
           <div className="refresh-quote-summary"><div><small>LOWEST QUOTED PRICE</small><strong>$18,400</strong><span>Northstar Components</span></div><div><small>REVIEW FLAG</small><strong className="refresh-warning">2 items</strong><span>Missing warranty · delivery variance</span></div><div><small>COMPARISON BASIS</small><strong>USD only</strong><span>Currency consistency checked</span></div></div>
           <div className="refresh-quote-table">
@@ -32,7 +32,7 @@ export function SampleShowcase() {
           <div className="refresh-sample-foot"><strong>Decision support, not autopilot.</strong><span>Extraction → validation → deterministic comparison → human review</span></div>
         </div>
       ) : (
-        <div className="refresh-sample-panel" role="tabpanel" aria-label="EvidenceFlow synthetic example">
+        <div className="refresh-sample-panel" aria-label="EvidenceFlow synthetic example">
           <div className="refresh-sample-panel-top"><span className="refresh-sample-status"><i /> SYNTHETIC KNOWLEDGE EXAMPLE</span><span>ANSWER WITH SOURCE CONTEXT</span></div>
           <div className="refresh-evidence-query"><small>QUESTION</small><strong>What checks are required before a supplier is approved?</strong></div>
           <div className="refresh-evidence-answer"><div><small>GROUNDED RESPONSE</small><h3>Three checks are identified in the sample policy.</h3><p>Verify business registration, confirm the tax identifier, and complete the risk review before approval. The workflow keeps the cited source passages available for inspection.</p></div><aside><span>ANSWER STATUS</span><strong>Evidence attached</strong><span className="refresh-evidence-score">3 source passages</span></aside></div>

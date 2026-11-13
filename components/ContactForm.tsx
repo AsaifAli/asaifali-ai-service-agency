@@ -50,7 +50,7 @@ export function ContactForm() {
       setState("sent");
       setMessage(
         result.message ||
-          "Your enquiry has been received. You can expect a reply by email.",
+          "Your enquiry has reached the studio. I aim to reply within two business days.",
       );
       formElement.reset();
     } catch (caught) {
@@ -58,7 +58,7 @@ export function ContactForm() {
       setMessage(
         caught instanceof Error
           ? caught.message
-          : "We could not send your message. Please email the studio directly.",
+          : "We could not send your message. Please try again later or use another contact method shown on the page.",
       );
     }
   }
@@ -106,15 +106,21 @@ export function ContactForm() {
             <option>Within 1 month</option>
             <option>Within 1–3 months</option>
             <option>Exploring / flexible</option>
-            <option>Flexible</option>
           </select>
         </div>
       </div>
 
       <div className="field">
         <label htmlFor="budget_range">Indicative budget (optional)</label>
-        <input id="budget_range" name="budget_range" maxLength={80} placeholder="Share a range, or write ‘not decided’" />
-        <span className="field-hint">A rough indication is enough. Final fees depend on the agreed scope.</span>
+        <select id="budget_range" name="budget_range" defaultValue="Not decided yet">
+          <option>Under ₹50,000</option>
+          <option>₹50,000–₹1,50,000</option>
+          <option>₹1,50,000–₹5,00,000</option>
+          <option>₹5,00,000+</option>
+          <option>Not decided yet</option>
+          <option>Prefer to discuss</option>
+        </select>
+        <span className="field-hint">This is only an indicative project budget, not a quote. Final fees depend on the agreed scope.</span>
       </div>
 
       <div className="field">
