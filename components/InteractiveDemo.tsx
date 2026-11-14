@@ -55,18 +55,23 @@ const providers: ProviderOption[] = [
   },
 ];
 
-const HANDOFF_PARAM = "portfolio_llm_session";
+const HANDOFF_PARAM = "portfolio_llm_handoff";
+const LEGACY_HANDOFF_PARAM = "portfolio_llm_session";
 
 function buildLaunchUrl(
   liveUrl: string,
-  token: string,
+  handoffCode: string,
 ): string {
   const target = new URL(liveUrl);
 
-  // Transitional behaviour only.
-  // Replace this with the one-time gateway handoff after
-  // the gateway and receiving demo apps support code exchange.
-  target.searchParams.set(HANDOFF_PARAM, token);
+  if (target.protocol !== "https:") {
+    throw new Error("Demo URLs must use HTTPS.");
+  }
+
+  // Never preserve an older token or handoff code from a configured URL.
+  target.searchParams.delete(LEGACY_HANDOFF_PARAM);
+  target.searchParams.delete(HANDOFF_PARAM);
+  target.searchParams.set(HANDOFF_PARAM, handoffCode);
 
   return target.toString();
 }
@@ -90,6 +95,9 @@ export function InteractiveDemo({ projects }: Props) {
     useState("gemini-3.5-flash-lite");
 
   const [apiKey, setApiKey] = useState("");
+  const [launchingProject, setLaunchingProject] =
+    useState<string | null>(null);
+  const [launchError, setLaunchError] = useState("");
 
   const selectedProvider = useMemo(
     () =>
@@ -116,21 +124,83 @@ export function InteractiveDemo({ projects }: Props) {
     }
   }
 
-  function launchProject(project: DemoProject) {
-    if (!token || !project.liveUrl) {
+  async function launchProject(project: DemoProject) {
+    if (!token || !project.liveUrl || launchingProject) {
       return;
     }
 
-    const launchUrl = buildLaunchUrl(
-      project.liveUrl,
-      token,
-    );
+    if (!["evidenceflow", "quotesense"].includes(project.slug)) {
+      setLaunchError(
+        "This demonstration is not enabled for secure launch.",
+      );
+      return;
+    }
 
-    window.open(
-      launchUrl,
-      "_blank",
-      "noopener,noreferrer",
-    );
+    // Open synchronously during the click so popup blockers do not
+    // suppress the tab while the server requests the one-time code.
+    const popup = window.open("about:blank", "_blank");
+
+    if (!popup) {
+      setLaunchError(
+        "Your browser blocked the new tab. Allow pop-ups and retry.",
+      );
+      return;
+    }
+
+    popup.opener = null;
+    setLaunchingProject(project.slug);
+    setLaunchError("");
+
+    try {
+      // The reusable bearer token goes only to our same-origin server route.
+      const response = await fetch("/api/demo/handoff", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          project: project.slug,
+        }),
+        cache: "no-store",
+      });
+
+      const payload = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          payload?.error ||
+            "The Gateway could not prepare this demonstration. Reconnect and retry.",
+        );
+      }
+
+      if (
+        typeof payload?.code !== "string" ||
+        !/^[A-Za-z0-9_-]{32,128}$/.test(payload.code) ||
+        payload.project !== project.slug ||
+        !Number.isInteger(payload.expires_in) ||
+        payload.expires_in < 1 ||
+        payload.expires_in > 60
+      ) {
+        throw new Error(
+          "The Gateway returned an invalid launch code.",
+        );
+      }
+
+      popup.location.replace(
+        buildLaunchUrl(project.liveUrl, payload.code),
+      );
+    } catch (caught) {
+      popup.close();
+
+      setLaunchError(
+        caught instanceof Error
+          ? caught.message
+          : "Unable to launch this demonstration. Please retry.",
+      );
+    } finally {
+      setLaunchingProject(null);
+    }
   }
 
   return (
@@ -316,6 +386,12 @@ export function InteractiveDemo({ projects }: Props) {
             </form>
           )}
 
+          {launchError ? (
+            <p className="demo-form-error" role="alert">
+              {launchError}
+            </p>
+          ) : null}
+
           <div className="demo-security-note">
             <strong>For evaluation only</strong>
 
@@ -361,8 +437,12 @@ export function InteractiveDemo({ projects }: Props) {
                 <button
                   className="demo-launch-button"
                   type="button"
-                  onClick={() => launchProject(project)}
-                  disabled={!token || !project.liveUrl}
+                  onClick={() => void launchProject(project)}
+                  disabled={
+                    !token ||
+                    !project.liveUrl ||
+                    launchingProject !== null
+                  }
                   title={
                     !project.liveUrl
                       ? "A live deployment is not configured"
@@ -371,9 +451,11 @@ export function InteractiveDemo({ projects }: Props) {
                         : "Connect a provider to enable this demonstration"
                   }
                 >
-                  {token
-                    ? "Launch demonstration"
-                    : "Connect to launch"}
+                  {launchingProject === project.slug
+                    ? "Preparing secure launch…"
+                    : token
+                      ? "Launch demonstration"
+                      : "Connect to launch"}
 
                   <span aria-hidden="true">↗</span>
                 </button>

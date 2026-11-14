@@ -186,6 +186,7 @@ export function AISessionProvider({
               provider,
               model: model.trim(),
               api_key: apiKey,
+              project: "portfolio",
             }),
             cache: "no-store",
           },
