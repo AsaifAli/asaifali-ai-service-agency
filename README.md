@@ -1,8 +1,15 @@
+
 # AI Engineering Studio
 
-An independent, founder-led applied AI engineering practice focused on document intelligence, knowledge systems and controlled workflow automation.
+**Human-led. Agent-powered. Outcome-driven.**
 
-The studio is directly led by Asaif Ali. The public portfolio highlights two independent engineering builds:
+An independent, founder-led AI solutions practice focused on document intelligence, evidence-grounded knowledge systems and controlled workflow automation.
+
+The studio is directly led by Asaif Ali. Specialist AI-assisted workflows can support bounded tasks such as research, architecture support, implementation assistance and evaluation. Technical decisions, client communication, approvals and final delivery remain human-led and accountable.
+
+## Featured engineering builds
+
+The public portfolio focuses on two independent engineering builds:
 
 - **QuoteSense** — document intelligence for extracting, validating and comparing supplier quotations.
 - **EvidenceFlow** — knowledge retrieval and evidence-grounded responses over internal information.
@@ -11,30 +18,141 @@ These are independent engineering builds, not paid client case studies or custom
 
 ## Website experience
 
-The homepage explains the problems addressed, capabilities, selected work, no-key sample walkthroughs, founder, delivery approach, engagement models and contact path. The advanced live model workbench is at `/technical-lab` and uses the existing provider-key workflow. It is optional and intended for technical evaluation with test credentials and non-confidential data only.
+The homepage covers the operating problems addressed, service capabilities, the delivery model, selected engineering work, illustrative sample walkthroughs, founder information, engagement models and the contact path.
+
+The advanced live model workbench is available at `/technical-lab`. It allows technical evaluators to connect their own supported AI provider API key for live model requests. It is optional and intended for testing with limited-spend credentials and synthetic or non-confidential data only.
 
 The visual theme follows the visitor's operating-system appearance preference. There is no manual theme toggle or locally stored theme choice.
 
 ## Engineering principles
 
 - Start with the operating problem, not a preferred model or framework.
-- Keep extraction, deterministic business rules and human decisions distinguishable.
+- Keep model-assisted extraction, deterministic business rules and human decisions distinguishable.
 - Make source evidence, exceptions and failure paths visible.
 - Evaluate on representative cases before claiming readiness.
+- Restrict tools and permissions to the task being performed.
 - Agree source ownership, provider usage, infrastructure and support responsibilities in writing.
 - Hand over understandable code, documentation and operating instructions.
 
+## Technology
+
+The website is built with:
+
+- Next.js App Router
+- React and TypeScript
+- Supabase for project content, authentication and the enquiry inbox
+- Resend for studio enquiry notifications
+- A separate shared LLM gateway for optional live demonstrations
+
+The gateway and public demo applications are separate services and have their own deployment configuration.
+
 ## Local development
 
-Install dependencies with the package manager and lockfile already used by this repository, then run:
+Use Node.js 22.x.
+
+Install dependencies:
+
+```bash
+npm ci
+```
+
+Create `.env.local` using `.env.example` as a reference. Preserve your existing local provider configuration and never commit the local environment file.
+
+Run the development server:
 
 ```bash
 npm run dev
+```
+
+Run quality checks:
+
+```bash
 npm run lint
 npm run typecheck
+npm audit --omit=dev
 npm run build
 ```
 
-Copy `.env.example` to `.env.local` only as a reference and preserve existing local provider configuration. Never commit `.env.local`, service-role keys, API keys or other secrets.
+## Environment configuration
 
-See `README-IMPLEMENTATION.md` in the section-refresh bundle for patch instructions, validation steps and outstanding production checks.
+The main environment variables are documented in `.env.example`.
+
+Server-only values include:
+
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `RESEND_API_KEY`
+- `CONTACT_RATE_LIMIT_SECRET`
+- `CONTACT_TO_EMAIL`
+- `CONTACT_FROM_EMAIL`
+
+The optional public settings include:
+
+- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- `NEXT_PUBLIC_LLM_GATEWAY_URL`
+- `NEXT_PUBLIC_CONTACT_EMAIL`
+- `NEXT_PUBLIC_BOOKING_URL`
+
+`CONTACT_IP_HEADER` must identify a client-IP header that the hosting proxy reliably overwrites. Confirm the correct header in the hosting environment before enabling production contact submissions.
+
+Never expose service-role keys, Resend credentials, rate-limit secrets or provider API keys through `NEXT_PUBLIC_` variables.
+
+## Supabase setup
+
+For a new database, use:
+
+```text
+supabase/schema.sql
+```
+
+For an existing database, apply the migrations in order after backing up the project:
+
+```text
+supabase/migrations/20261113_agency_hardening.sql
+supabase/migrations/202611140001_lead_operations.sql
+```
+
+The admin workspace uses the trusted Supabase `app_metadata.studio_role = admin` claim. Do not use user-editable metadata as an authorization source.
+
+The public contact form submits through the server API. It does not insert directly into the contact-message table.
+
+## Admin workspace
+
+The admin area provides project content editing and a private enquiry inbox.
+
+Lead operations include:
+
+- Lead statuses: new, replied and closed
+- Private internal notes
+- Paginated lead review
+- CSV export
+- Retry for pending or failed email notifications
+
+Only authenticated users with the trusted studio-admin claim should access these operations.
+
+## Deployment and security
+
+Before production use:
+
+1. Configure the required Vercel environment variables.
+2. Verify the Supabase service-role key and admin claim setup.
+3. Confirm the hosting proxy's trusted client-IP header.
+4. Verify the Resend sending domain and sender address.
+5. Apply the appropriate Supabase migration for the deployment.
+6. Submit a test enquiry and confirm both inbox storage and notification behaviour.
+7. Confirm the security response headers and review the CSP report-only findings before tightening the policy.
+
+Never include `.env.local`, `.env` files, service-role keys, provider credentials or other secrets in a source archive or ZIP bundle.
+
+## Quality workflow
+
+GitHub Actions runs:
+
+- Dependency installation from the lockfile
+- ESLint
+- TypeScript type checking
+- Production dependency audit
+- Next.js production build
+
+Dependabot is configured to check npm dependencies and GitHub Actions updates weekly.

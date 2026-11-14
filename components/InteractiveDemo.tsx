@@ -57,9 +57,15 @@ const providers: ProviderOption[] = [
 
 const HANDOFF_PARAM = "portfolio_llm_session";
 
-function buildLaunchUrl(liveUrl: string, token: string) {
+function buildLaunchUrl(
+  liveUrl: string,
+  token: string,
+): string {
   const target = new URL(liveUrl);
 
+  // Transitional behaviour only.
+  // Replace this with the one-time gateway handoff after
+  // the gateway and receiving demo apps support code exchange.
   target.searchParams.set(HANDOFF_PARAM, token);
 
   return target.toString();
@@ -77,8 +83,12 @@ export function InteractiveDemo({ projects }: Props) {
     revokeSession,
   } = useAISession();
 
-  const [provider, setProvider] = useState<ProviderId>("google");
-  const [model, setModel] = useState("gemini-3.5-flash-lite");
+  const [provider, setProvider] =
+    useState<ProviderId>("google");
+
+  const [model, setModel] =
+    useState("gemini-3.5-flash-lite");
+
   const [apiKey, setApiKey] = useState("");
 
   const selectedProvider = useMemo(
@@ -88,32 +98,40 @@ export function InteractiveDemo({ projects }: Props) {
     [provider],
   );
 
-  const handleConnect = async (
+  async function handleConnect(
     event: FormEvent<HTMLFormElement>,
-  ) => {
+  ) {
     event.preventDefault();
 
-    await createSession({
+    const connected = await createSession({
       provider,
       model,
       apiKey,
     });
 
-    // Do not clear the key here. If the gateway rejects the
-    // request, the user can correct the issue and retry.
-  };
+    // Clear the raw provider key only when the gateway
+    // confirms successful session creation.
+    if (connected) {
+      setApiKey("");
+    }
+  }
 
-  const launchProject = (project: DemoProject) => {
+  function launchProject(project: DemoProject) {
     if (!token || !project.liveUrl) {
       return;
     }
 
+    const launchUrl = buildLaunchUrl(
+      project.liveUrl,
+      token,
+    );
+
     window.open(
-      buildLaunchUrl(project.liveUrl, token),
+      launchUrl,
       "_blank",
       "noopener,noreferrer",
     );
-  };
+  }
 
   return (
     <section
@@ -130,8 +148,9 @@ export function InteractiveDemo({ projects }: Props) {
         </div>
 
         <p>
-          Connect a provider once. Use that temporary
-          session to open either demonstration in a new tab.
+          Connect your own AI provider API key once. Use
+          that temporary session to open either
+          demonstration in a new tab.
         </p>
       </div>
 
@@ -192,9 +211,11 @@ export function InteractiveDemo({ projects }: Props) {
               onSubmit={handleConnect}
             >
               <p className="demo-form-intro">
-                Use your own provider account and API key.
-                Your key is sent to the configured gateway
-                for temporary encrypted session use.
+                Connect your own AI provider account using
+                an API key. The key is sent over HTTPS to
+                the configured gateway for temporary
+                session use. It is not saved in browser
+                storage.
               </p>
 
               <div className="demo-field">
@@ -251,7 +272,7 @@ export function InteractiveDemo({ projects }: Props) {
 
               <div className="demo-field">
                 <label htmlFor="demo-api-key">
-                  API key
+                  Provider API key
                 </label>
 
                 <input
@@ -262,27 +283,33 @@ export function InteractiveDemo({ projects }: Props) {
                     setApiKey(event.target.value)
                   }
                   placeholder={`Your ${selectedProvider.label} API key`}
-                  autoComplete="off"
+                  autoComplete="new-password"
                   spellCheck={false}
                   required
                 />
               </div>
 
-              {error && (
+              {error ? (
                 <p
                   className="demo-form-error"
                   role="alert"
                 >
                   {error}
                 </p>
-              )}
+              ) : null}
 
               <button
                 className="demo-connect-button"
                 type="submit"
-                disabled={creating}
+                disabled={
+                  creating ||
+                  !apiKey.trim() ||
+                  !model.trim()
+                }
               >
-                {creating ? "Connecting…" : "Connect provider"}
+                {creating
+                  ? "Connecting…"
+                  : "Connect provider"}
 
                 <span aria-hidden="true">→</span>
               </button>
@@ -296,7 +323,7 @@ export function InteractiveDemo({ projects }: Props) {
               Use synthetic or non-confidential information.
               Do not submit production credentials, customer
               records, or private business documents through
-              public demos.
+              public demonstrations.
             </p>
           </div>
         </aside>
@@ -309,7 +336,7 @@ export function InteractiveDemo({ projects }: Props) {
             >
               <div className="demo-project-card-top">
                 <span className="studio-number">
-                  0{index + 1}
+                  {String(index + 1).padStart(2, "0")}
                 </span>
 
                 <span className="demo-project-category">
@@ -352,13 +379,13 @@ export function InteractiveDemo({ projects }: Props) {
                 </button>
 
                 <div className="demo-project-secondary-links">
-                  {project.detailsUrl && (
+                  {project.detailsUrl ? (
                     <Link href={project.detailsUrl}>
                       Technical overview
                     </Link>
-                  )}
+                  ) : null}
 
-                  {project.githubUrl && (
+                  {project.githubUrl ? (
                     <a
                       href={project.githubUrl}
                       target="_blank"
@@ -366,7 +393,7 @@ export function InteractiveDemo({ projects }: Props) {
                     >
                       Source
                     </a>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </article>
@@ -375,12 +402,12 @@ export function InteractiveDemo({ projects }: Props) {
       </div>
 
       <p className="demo-workbench-footnote">
-        The provider key is not written to browser storage.
-        The gateway encrypts it for temporary server-side
-        session use; only a short-lived session token is
-        kept in this browser session. Session duration and
-        security depend on the production gateway
-        configuration.
+        The provider API key is not written to browser
+        storage. The gateway handles temporary
+        server-side session use. Only a short-lived
+        session token is kept in this browser session.
+        Session duration, encryption and revocation depend
+        on the production gateway configuration.
       </p>
     </section>
   );

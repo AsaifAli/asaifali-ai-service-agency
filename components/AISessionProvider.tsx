@@ -28,7 +28,7 @@ type ContextValue = SessionState & {
   hydrated: boolean;
   creating: boolean;
   error: string;
-  createSession: (args: CreateArgs) => Promise<void>;
+  createSession: (args: CreateArgs) => Promise<boolean>;
   revokeSession: () => Promise<void>;
 };
 
@@ -41,12 +41,11 @@ const EMPTY_SESSION: SessionState = {
   expiresAt: null,
 };
 
-const GATEWAY_URL = process.env.NEXT_PUBLIC_LLM_GATEWAY_URL?.replace(
-  /\/$/,
-  "",
-);
+const GATEWAY_URL =
+  process.env.NEXT_PUBLIC_LLM_GATEWAY_URL?.replace(/\/$/, "");
 
-export const SessionContext = createContext<ContextValue | null>(null);
+export const SessionContext =
+  createContext<ContextValue | null>(null);
 
 let clientSnapshot: SessionState = EMPTY_SESSION;
 let clientSnapshotInitialized = false;
@@ -78,16 +77,21 @@ function loadSession(): SessionState {
     const parsed = JSON.parse(raw) as SessionState;
 
     if (!parsed?.token) {
+      window.sessionStorage.removeItem(STORAGE_KEY);
       return EMPTY_SESSION;
     }
 
-    if (parsed.expiresAt && Date.now() >= parsed.expiresAt) {
+    if (
+      parsed.expiresAt &&
+      Date.now() >= parsed.expiresAt
+    ) {
       window.sessionStorage.removeItem(STORAGE_KEY);
       return EMPTY_SESSION;
     }
 
     return parsed;
   } catch {
+    window.sessionStorage.removeItem(STORAGE_KEY);
     return EMPTY_SESSION;
   }
 }
@@ -148,15 +152,23 @@ export function AISessionProvider({
   }, [session.expiresAt]);
 
   const createSession = useCallback(
-    async ({ provider, model, apiKey }: CreateArgs) => {
+    async ({
+      provider,
+      model,
+      apiKey,
+    }: CreateArgs): Promise<boolean> => {
       if (!GATEWAY_URL) {
-        setError("Interactive demos are not configured yet.");
-        return;
+        setError(
+          "Interactive demonstrations are not configured yet.",
+        );
+        return false;
       }
 
       if (!apiKey.trim() || !model.trim()) {
-        setError("Enter an API key and model ID to continue.");
-        return;
+        setError(
+          "Enter your provider API key and a model ID to continue.",
+        );
+        return false;
       }
 
       setCreating(true);
@@ -175,22 +187,28 @@ export function AISessionProvider({
               model: model.trim(),
               api_key: apiKey,
             }),
+            cache: "no-store",
           },
         );
 
-        const payload = await response.json().catch(() => ({}));
+        const payload = await response
+          .json()
+          .catch(() => ({}));
 
         if (!response.ok) {
           throw new Error(
             payload?.detail ||
               payload?.error?.message ||
-              "Unable to create demo session.",
+              "Unable to create the demonstration session.",
           );
         }
 
-        if (!payload.access_token) {
+        if (
+          typeof payload?.access_token !== "string" ||
+          !payload.access_token.trim()
+        ) {
           throw new Error(
-            "Gateway did not return a session token.",
+            "The gateway did not return a valid session token.",
           );
         }
 
@@ -199,6 +217,15 @@ export function AISessionProvider({
           : payload.expires_in
             ? Date.now() + Number(payload.expires_in) * 1000
             : Date.now() + 15 * 60 * 1000;
+
+        if (
+          !Number.isFinite(expiresAt) ||
+          expiresAt <= Date.now()
+        ) {
+          throw new Error(
+            "The gateway returned an invalid session expiry.",
+          );
+        }
 
         const next: SessionState = {
           token: payload.access_token,
@@ -216,12 +243,16 @@ export function AISessionProvider({
         clientSnapshotInitialized = true;
 
         emitSessionChange();
+
+        return true;
       } catch (caught) {
         setError(
           caught instanceof Error
             ? caught.message
-            : "Unable to create demo session.",
+            : "Unable to create the demonstration session.",
         );
+
+        return false;
       } finally {
         setCreating(false);
       }
@@ -239,10 +270,12 @@ export function AISessionProvider({
             headers: {
               Authorization: `Bearer ${session.token}`,
             },
+            cache: "no-store",
           },
         );
       } catch {
-        // Local state is cleared even if the gateway is unreachable.
+        // Local session state is cleared even if the gateway
+        // cannot be reached. The server-side token will expire.
       }
     }
 

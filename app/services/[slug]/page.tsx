@@ -1,8 +1,9 @@
 
 import Link from "next/link";
 import { notFound } from "next/navigation";
+
 import { getService, services } from "@/lib/services";
-import { studioMetadata } from "@/lib/seo";
+import { SITE_URL, studioMetadata } from "@/lib/seo";
 
 export const dynamicParams = false;
 
@@ -49,11 +50,88 @@ export default async function ServiceDetailPage({
     notFound();
   }
 
+  const pageUrl = new URL(
+    `/services/${service.slug}`,
+    SITE_URL,
+  ).toString();
+
+  const serviceJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Service",
+    "@id": `${pageUrl}#service`,
+    name: service.title,
+    serviceType: service.title,
+    description: service.summary,
+    url: pageUrl,
+    provider: {
+      "@type": "ProfessionalService",
+      name: "AI Engineering Studio",
+      url: SITE_URL,
+      founder: {
+        "@type": "Person",
+        name: "Asaif Ali",
+        url: "https://www.linkedin.com/in/sk-asaif-ali-134873243",
+      },
+    },
+    areaServed: [
+      {
+        "@type": "Country",
+        name: "India",
+      },
+      {
+        "@type": "Place",
+        name: "Worldwide",
+      },
+    ],
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: SITE_URL,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Services",
+        item: new URL("/services", SITE_URL).toString(),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: service.title,
+        item: pageUrl,
+      },
+    ],
+  };
+
   return (
     <main className="studio-main studio-inner-page">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(serviceJsonLd),
+        }}
+      />
+
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(breadcrumbJsonLd),
+        }}
+      />
+
       <section className="studio-page-hero">
         <div className="studio-container">
-          <Link className="studio-back-link" href="/services">
+          <Link
+            className="studio-back-link"
+            href="/services"
+          >
             ← All services
           </Link>
 
@@ -69,7 +147,10 @@ export default async function ServiceDetailPage({
       <section className="studio-section">
         <div className="studio-container studio-detail-intro">
           <div>
-            <p className="studio-eyebrow">The engineering work</p>
+            <p className="studio-eyebrow">
+              The engineering work
+            </p>
+
             <h2>What the capability involves</h2>
           </div>
 
@@ -80,7 +161,10 @@ export default async function ServiceDetailPage({
       <section className="studio-section studio-detail-alt">
         <div className="studio-container studio-detail-columns">
           <article>
-            <p className="studio-eyebrow">01 / Where it fits</p>
+            <p className="studio-eyebrow">
+              01 / Where it fits
+            </p>
+
             <h2>Typical project context</h2>
 
             <ul>
@@ -91,7 +175,10 @@ export default async function ServiceDetailPage({
           </article>
 
           <article>
-            <p className="studio-eyebrow">02 / Work products</p>
+            <p className="studio-eyebrow">
+              02 / Work products
+            </p>
+
             <h2>What the work may include</h2>
 
             <ul>
@@ -109,6 +196,7 @@ export default async function ServiceDetailPage({
             <p className="studio-eyebrow">
               03 / Engineering practice
             </p>
+
             <h2>How the system is approached</h2>
 
             <ul>
@@ -122,6 +210,7 @@ export default async function ServiceDetailPage({
             <p className="studio-eyebrow">
               04 / Scoping considerations
             </p>
+
             <h2>What needs to be understood</h2>
 
             <ul>
@@ -136,11 +225,18 @@ export default async function ServiceDetailPage({
       <section className="studio-contact-cta">
         <div className="studio-container studio-contact-cta-inner">
           <div>
-            <p className="studio-eyebrow">Next step</p>
-            <h2>Discuss your workflow and constraints.</h2>
+            <p className="studio-eyebrow">
+              Next step
+            </p>
+
+            <h2>
+              Discuss your workflow and constraints.
+            </h2>
+
             <p>
-              Scope depends on the process, systems, access, evaluation
-              needs, and delivery responsibilities.
+              Scope depends on the process, systems,
+              access, evaluation needs and delivery
+              responsibilities.
             </p>
           </div>
 
@@ -148,7 +244,8 @@ export default async function ServiceDetailPage({
             className="studio-button studio-button-primary"
             href="/contact"
           >
-            Project enquiry <span aria-hidden="true">↗</span>
+            Project enquiry{" "}
+            <span aria-hidden="true">↗</span>
           </Link>
         </div>
       </section>

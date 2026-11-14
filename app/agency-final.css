@@ -1,0 +1,658 @@
+
+/* =========================================================
+   AI ENGINEERING STUDIO — FINAL ART DIRECTION LAYER
+   Loaded after the existing agency stylesheets.
+   Theme remains controlled by the operating-system setting.
+   ========================================================= */
+
+:root {
+  --agency-ink: #11131b;
+  --agency-paper: #f5f1e9;
+  --agency-muted: #777b86;
+  --agency-line: rgba(30, 33, 43, 0.14);
+  --agency-coral: #ff735f;
+  --agency-blue: #7ea7ff;
+  --agency-violet: #a895ff;
+  --agency-lime: #c7ec73;
+  --agency-amber: #ffca72;
+  --agency-mono: var(--font-mono), monospace;
+  --agency-sans: var(--font-inter), Arial, sans-serif;
+}
+
+html[data-theme="dark"] {
+  --agency-ink: #f3f0e9;
+  --agency-paper: #10131b;
+  --agency-muted: #a1a6b3;
+  --agency-line: rgba(235, 239, 248, 0.15);
+}
+
+html[data-theme="light"] {
+  --agency-ink: #171923;
+  --agency-paper: #f5f1e9;
+  --agency-muted: #696d78;
+  --agency-line: rgba(30, 33, 43, 0.14);
+}
+
+/* ---------- Global finishing ---------- */
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  font-family: var(--agency-sans);
+}
+
+::selection {
+  color: #11131b;
+  background: var(--agency-lime);
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--agency-coral);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  z-index: 10000;
+}
+
+/* ---------- Hero art direction ---------- */
+
+.refresh-hero {
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.refresh-hero-copy .studio-eyebrow {
+  letter-spacing: 0.13em;
+}
+
+.refresh-hero-copy h1 {
+  letter-spacing: -0.075em;
+}
+
+.refresh-hero-copy h1 span {
+  background: linear-gradient(
+    105deg,
+    var(--agency-coral) 0%,
+    #f6a76a 38%,
+    var(--agency-violet) 72%,
+    var(--agency-blue) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.refresh-hero-proof span {
+  position: relative;
+}
+
+.refresh-hero-proof span::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-right: 9px;
+  border-radius: 50%;
+  background: var(--agency-coral);
+  vertical-align: middle;
+}
+
+/* ---------- Agent delivery section ---------- */
+
+.agent-delivery-system {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(76px, 9vw, 132px) 0;
+  color: var(--agency-ink);
+  background:
+    radial-gradient(
+      circle at 7% 9%,
+      rgba(255, 115, 95, 0.13),
+      transparent 29rem
+    ),
+    radial-gradient(
+      circle at 94% 78%,
+      rgba(126, 167, 255, 0.13),
+      transparent 31rem
+    ),
+    var(--agency-paper);
+  border-top: 1px solid var(--agency-line);
+  border-bottom: 1px solid var(--agency-line);
+}
+
+.agent-delivery-system::before {
+  position: absolute;
+  z-index: -1;
+  top: 10%;
+  right: -13rem;
+  width: 30rem;
+  height: 30rem;
+  border: 1px solid var(--agency-line);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.agent-delivery-system::after {
+  position: absolute;
+  z-index: -1;
+  right: -7rem;
+  bottom: 3%;
+  width: 18rem;
+  height: 18rem;
+  border: 1px solid var(--agency-line);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.agent-section-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(260px, 0.65fr);
+  align-items: end;
+  gap: clamp(28px, 6vw, 90px);
+  margin-bottom: 52px;
+}
+
+.agent-heading-copy .studio-eyebrow {
+  margin-bottom: 20px;
+  color: var(--agency-coral);
+}
+
+.agent-heading-copy h2 {
+  max-width: 780px;
+  margin: 0;
+  font-size: clamp(2.5rem, 5.5vw, 5.4rem);
+  font-weight: 650;
+  line-height: 0.99;
+  letter-spacing: -0.075em;
+}
+
+.agent-heading-copy h2 span {
+  display: block;
+  color: var(--agency-muted);
+}
+
+.agent-section-intro {
+  max-width: 490px;
+  margin: 0 0 5px;
+  color: var(--agency-muted);
+  font-size: clamp(0.98rem, 1.15vw, 1.1rem);
+  line-height: 1.8;
+}
+
+.agent-system-frame {
+  position: relative;
+  padding: clamp(18px, 3vw, 36px);
+  border: 1px solid var(--agency-line);
+  border-radius: 22px;
+  background: color-mix(in srgb, var(--agency-paper) 88%, transparent);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(16px);
+}
+
+.agent-system-topline,
+.agent-role-top,
+.agent-approval-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.agent-system-topline {
+  padding-bottom: 22px;
+  color: var(--agency-muted);
+  font-family: var(--agency-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+}
+
+.agent-system-topline > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: var(--agency-ink);
+}
+
+.agent-system-topline i,
+.agent-founder-status i {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #75c991;
+  box-shadow: 0 0 0 4px rgba(117, 201, 145, 0.12);
+}
+
+.agent-founder-node {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  width: min(100%, 620px);
+  margin: 0 auto;
+  padding: 20px 22px;
+  border: 1px solid rgba(255, 115, 95, 0.42);
+  border-radius: 14px;
+  background:
+    linear-gradient(
+      110deg,
+      rgba(255, 115, 95, 0.13),
+      rgba(168, 149, 255, 0.09)
+    ),
+    var(--agency-paper);
+}
+
+.agent-founder-mark {
+  display: grid;
+  flex: 0 0 50px;
+  width: 50px;
+  height: 50px;
+  place-items: center;
+  border-radius: 12px;
+  color: #171923;
+  background: linear-gradient(135deg, var(--agency-coral), #ffc47d);
+  font-family: var(--agency-mono);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.agent-founder-copy {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+}
+
+.agent-founder-copy > span,
+.agent-founder-status,
+.agent-role-code,
+.agent-role-output > span,
+.agent-approval-heading > span {
+  font-family: var(--agency-mono);
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+}
+
+.agent-founder-copy > span {
+  color: var(--agency-coral);
+}
+
+.agent-founder-copy strong {
+  font-size: 1.15rem;
+  letter-spacing: -0.025em;
+}
+
+.agent-founder-copy small {
+  color: var(--agency-muted);
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.agent-founder-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-left: auto;
+  color: var(--agency-muted);
+  white-space: nowrap;
+}
+
+.agent-flow-connector {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 45px;
+}
+
+.agent-flow-connector span {
+  display: block;
+  width: 1px;
+  height: 15px;
+  background: var(--agency-line);
+}
+
+.agent-flow-connector span:last-child {
+  position: relative;
+  width: 7px;
+  height: 7px;
+  border-right: 1px solid var(--agency-coral);
+  border-bottom: 1px solid var(--agency-coral);
+  background: transparent;
+  transform: rotate(45deg);
+}
+
+.agent-role-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.agent-role-card {
+  position: relative;
+  display: flex;
+  min-height: 275px;
+  flex-direction: column;
+  padding: 20px;
+  overflow: hidden;
+  border: 1px solid var(--agency-line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--agency-paper) 92%, white 8%);
+  transition:
+    transform 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+}
+
+html[data-theme="dark"] .agent-role-card {
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.agent-role-card::after {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 110px;
+  height: 110px;
+  border: 1px solid var(--agent-accent);
+  border-radius: 50%;
+  opacity: 0.25;
+  content: "";
+}
+
+.agent-role-card:hover {
+  z-index: 1;
+  border-color: var(--agent-accent);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+}
+
+.agent-role-top {
+  position: relative;
+  z-index: 1;
+}
+
+.agent-role-number {
+  color: var(--agency-muted);
+  font-family: var(--agency-mono);
+  font-size: 0.7rem;
+}
+
+.agent-role-code {
+  color: var(--agent-accent);
+  font-size: 0.58rem;
+  text-align: right;
+}
+
+.agent-role-symbol {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  margin: 24px 0 16px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--agent-accent) 44%, transparent);
+  border-radius: 12px;
+  color: var(--agent-accent);
+  background: color-mix(in srgb, var(--agent-accent) 10%, transparent);
+  font-size: 1.35rem;
+}
+
+.agent-role-card h3 {
+  margin: 0 0 9px;
+  font-size: 1.16rem;
+  font-weight: 620;
+  letter-spacing: -0.04em;
+}
+
+.agent-role-card > p {
+  margin: 0;
+  color: var(--agency-muted);
+  font-size: 0.86rem;
+  line-height: 1.7;
+}
+
+.agent-role-output {
+  display: grid;
+  gap: 7px;
+  margin-top: auto;
+  padding-top: 19px;
+}
+
+.agent-role-output > span {
+  color: var(--agency-muted);
+  font-size: 0.56rem;
+}
+
+.agent-role-output strong {
+  color: var(--agency-ink);
+  font-size: 0.72rem;
+  font-weight: 550;
+  line-height: 1.5;
+}
+
+.agent-accent-coral {
+  --agent-accent: var(--agency-coral);
+}
+
+.agent-accent-blue {
+  --agent-accent: var(--agency-blue);
+}
+
+.agent-accent-violet {
+  --agent-accent: var(--agency-violet);
+}
+
+.agent-accent-lime {
+  --agent-accent: var(--agency-lime);
+}
+
+.agent-accent-amber {
+  --agent-accent: var(--agency-amber);
+}
+
+.agent-approval-track {
+  margin-top: 24px;
+  padding: 22px;
+  border: 1px solid var(--agency-line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--agency-paper) 90%, var(--agency-blue) 10%);
+}
+
+.agent-approval-heading {
+  align-items: baseline;
+  margin-bottom: 18px;
+}
+
+.agent-approval-heading > span {
+  color: var(--agency-ink);
+}
+
+.agent-approval-heading small {
+  color: var(--agency-muted);
+  font-size: 0.75rem;
+}
+
+.agent-approval-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.agent-approval-grid > div {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  column-gap: 9px;
+  row-gap: 4px;
+  align-items: start;
+  padding: 12px;
+  border-radius: 9px;
+  background: color-mix(in srgb, var(--agency-paper) 75%, transparent);
+}
+
+.agent-approval-grid > div > span {
+  grid-row: span 2;
+  color: var(--agency-coral);
+  font-family: var(--agency-mono);
+  font-size: 0.7rem;
+}
+
+.agent-approval-grid strong {
+  font-size: 0.8rem;
+  font-weight: 620;
+}
+
+.agent-approval-grid small {
+  color: var(--agency-muted);
+  font-size: 0.7rem;
+  line-height: 1.45;
+}
+
+.agent-principles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+  margin-top: 34px;
+}
+
+.agent-principles > div {
+  position: relative;
+  padding-top: 18px;
+  border-top: 1px solid var(--agency-line);
+}
+
+.agent-principle-index {
+  display: block;
+  margin-bottom: 13px;
+  color: var(--agency-coral);
+  font-family: var(--agency-mono);
+  font-size: 0.7rem;
+}
+
+.agent-principles strong {
+  display: block;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+}
+
+.agent-principles p {
+  max-width: 340px;
+  margin: 9px 0 0;
+  color: var(--agency-muted);
+  font-size: 0.83rem;
+  line-height: 1.7;
+}
+
+/* ---------- Responsive behaviour ---------- */
+
+@media (max-width: 900px) {
+  .agent-section-heading {
+    grid-template-columns: 1fr;
+    gap: 18px;
+  }
+
+  .agent-section-intro {
+    max-width: 680px;
+  }
+
+  .agent-role-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .agent-role-card {
+    min-height: 255px;
+  }
+}
+
+@media (max-width: 620px) {
+  .agent-delivery-system {
+    padding: 72px 0;
+  }
+
+  .agent-system-frame {
+    padding: 13px;
+    border-radius: 15px;
+  }
+
+  .agent-system-topline {
+    align-items: flex-start;
+    font-size: 0.55rem;
+  }
+
+  .agent-founder-node {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 15px;
+  }
+
+  .agent-founder-mark {
+    flex-basis: 42px;
+    width: 42px;
+    height: 42px;
+  }
+
+  .agent-founder-copy small {
+    max-width: 210px;
+  }
+
+  .agent-founder-status {
+    width: 100%;
+    margin-left: 54px;
+    font-size: 0.56rem;
+  }
+
+  .agent-role-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .agent-role-card {
+    min-height: 0;
+    padding: 17px;
+  }
+
+  .agent-role-symbol {
+    margin: 18px 0 12px;
+  }
+
+  .agent-role-output {
+    margin-top: 18px;
+  }
+
+  .agent-approval-track {
+    padding: 16px;
+  }
+
+  .agent-approval-heading {
+    display: grid;
+    gap: 7px;
+  }
+
+  .agent-approval-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .agent-principles {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .agent-role-card {
+    transition: none;
+  }
+
+  .agent-role-card:hover {
+    transform: none;
+  }
+}
