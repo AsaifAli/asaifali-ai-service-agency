@@ -5,7 +5,7 @@ import { studioMetadata } from "@/lib/seo";
 
 export const metadata = studioMetadata({
   title: "The Studio",
-  description: "Meet Asaif Ali and understand the founder-led approach to applied AI, software engineering and technical delivery.",
+  description: "Meet the founder of an independent AI solutions and engineering agency building custom applications, agentic systems and intelligent automation.",
   path: "/studio",
 });
 
@@ -15,9 +15,9 @@ export default async function StudioPage() {
     <main className="studio-main studio-inner-page refresh-inner-page refresh-studio-page">
       <section className="studio-page-hero refresh-page-hero"><div className="studio-container">
         <Link className="studio-back-link" href="/">← Home</Link>
-        <p className="studio-eyebrow">The studio / Independent practice</p>
-        <h1>Small by design. <em>Serious about the engineering.</em></h1>
-        <p>I run AI Engineering Studio as an independent practice focused on applied AI systems and the software engineering that connects them to real business processes.</p>
+        <p className="studio-eyebrow">The studio / AI solutions &amp; engineering</p>
+        <h1>AI solutions, built with <em>engineering discipline.</em></h1>
+        <p>AI Engineering Studio is an independent, founder-led AI solutions and engineering agency. I design and build custom AI applications, agentic systems and intelligent automation around the workflows, data and constraints of each business.</p>
       </div></section>
 
       <section className="studio-section"><div className="studio-container refresh-studio-profile">
@@ -27,15 +27,15 @@ export default async function StudioPage() {
         </div>
         <div className="studio-studio-copy refresh-studio-copy">
           <p className="studio-eyebrow">Founder / Technical lead</p>
-          <h2>Applied AI, built with software engineering discipline.</h2>
+          <h2>End-to-end AI engineering, led by the person building it.</h2>
           <p>I’m Asaif Ali, an AI/ML engineer and the founder of AI Engineering Studio. I hold an M.Sc. in Data Science from VIT-AP University (2022–2024). My professional background includes software engineering, with a focus on AI/ML engineering, alongside earlier hands-on data science and AI internship experience.</p>
           <p>My technical work spans LLM-powered applications, retrieval-augmented generation (RAG), agentic systems, MCP and API-based tool integrations, document intelligence, evaluation and deployment. Earlier data science and AI internships gave me hands-on experience in machine learning, data preparation, experimentation and model development. I work across the full path from problem definition and architecture to implementation, testing and handover.</p>
-          <p>The studio exists to make that work available to teams with a concrete operational problem. I favour clear scopes, observable system behaviour, meaningful evaluation, human review where it matters and the simplest architecture that meets the requirement. Not every workflow needs an LLM, and no system should be treated as production-ready just because a demo works.</p>
+          <p>The studio exists to help teams turn concrete operational problems into useful AI systems. Engagements may include custom application development, knowledge and document intelligence, agentic workflows or automation across existing tools. I favour clear scopes, observable system behaviour, meaningful evaluation, human review where it matters and the simplest architecture that meets the requirement. Not every workflow needs an LLM, and no system should be treated as production-ready just because a demo works.</p>
           <p>Engagements are founder-led: discovery, technical decisions, implementation and handover stay with the person responsible for the engineering. Source-code ownership, infrastructure accounts, provider costs and ongoing support are agreed before implementation begins.</p>
           <div className="studio-founder-credentials">
             <div><span>Education</span><strong>M.Sc. Data Science<br/>VIT-AP University · 2022–2024</strong></div>
             <div><span>Professional experience</span><strong>Software Engineer (AI/ML)</strong></div>
-            <div><span>Engineering focus</span><strong>Agentic AI · RAG · MCP · LLM apps<br/>Document intelligence · Evaluation</strong></div>
+            <div><span>Engineering focus</span><strong>Custom AI apps · Agentic AI · RAG · MCP<br/>Automation · Document intelligence · Evaluation</strong></div>
           </div>
           <div className="studio-social-links"><a href="https://github.com/AsaifAli" target="_blank" rel="noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/sk-asaif-ali-134873243" target="_blank" rel="noreferrer">LinkedIn ↗</a></div>
         </div>

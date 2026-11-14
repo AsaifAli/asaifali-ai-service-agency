@@ -7,7 +7,7 @@ const bookingUrl = process.env.NEXT_PUBLIC_BOOKING_URL?.trim();
 
 export const metadata = studioMetadata({
   title: "Project Enquiry",
-  description: "Discuss an AI engineering project, document intelligence workflow, knowledge system or business automation requirement.",
+  description: "Discuss a custom AI solution, agentic system, intelligent automation workflow or AI engineering project.",
   path: "/contact",
 });
 
@@ -17,16 +17,16 @@ export default function ContactPage() {
       <section className="studio-page-hero refresh-page-hero">
         <div className="studio-container">
           <Link className="studio-back-link" href="/">← Home</Link>
-          <p className="studio-eyebrow">Project enquiry / Start a conversation</p>
+          <p className="studio-eyebrow">AI solutions / Start a conversation</p>
           <h1>Start with the workflow. <em>Not a technical specification.</em></h1>
-          <p>Tell me what is difficult today, who is involved and what a useful result would look like. The first conversation is about understanding fit and constraints—not selling you a preselected AI solution.</p>
+          <p>Tell me what is difficult today, who is involved and what a useful result would look like. We will shape the right response around your operation—whether that means a custom AI application, an agentic workflow, intelligent automation or a combination. The first conversation is about fit and constraints, not selling a preselected technology.</p>
         </div>
       </section>
 
       <section className="studio-section">
         <div className="studio-container studio-contact-page-grid">
           <aside className="studio-contact-page-aside refresh-contact-aside">
-            <p className="studio-eyebrow">A useful first conversation</p>
+            <p className="studio-eyebrow">From business problem to solution</p>
             <h2>What happens next?</h2>
             <ol className="refresh-contact-steps">
               <li><strong>I review the workflow.</strong><span>I read your note and identify the key questions.</span></li>

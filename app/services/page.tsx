@@ -5,9 +5,9 @@ import { services } from "@/lib/services";
 import { studioMetadata } from "@/lib/seo";
 
 export const metadata = studioMetadata({
-  title: "Services",
+  title: "AI Solutions & Engineering",
   description:
-    "Business knowledge systems, document intelligence, agentic workflow automation, AI application engineering, integration, and AI evaluation.",
+    "End-to-end AI solutions: custom AI applications, agentic systems, intelligent automation, integrations, document intelligence and knowledge systems.",
   path: "/services",
 });
 
@@ -21,16 +21,16 @@ export default function ServicesPage() {
           </Link>
 
           <p className="studio-eyebrow">
-            Services / Engineering capabilities
+            Solutions / AI engineering capabilities
           </p>
 
-          <h1>Build the system around the intelligence.</h1>
+          <h1>End-to-end AI solutions. Built around your operation.</h1>
 
           <p>
-            Start with a business workflow, not a framework. The studio
-            works across knowledge systems, document intelligence, and
-            multi-step automation, supported by the application and
-            integration engineering needed to make them usable.
+            I design, build and integrate custom AI applications,
+            agentic systems and intelligent automation around real
+            business problems. Each engagement brings together the
+            software, data, models and workflows needed for a usable system.
           </p>
         </div>
       </section>
@@ -40,13 +40,13 @@ export default function ServicesPage() {
           <div className="studio-commercial-header">
             <div>
               <p className="studio-eyebrow">Core solutions</p>
-              <h2>Three ways to create useful applied AI systems.</h2>
+              <h2>Three pillars. One connected engineering practice.</h2>
             </div>
 
             <p>
-              Each solution can combine multiple engineering capabilities.
-              Scope is shaped by the process, existing systems, data
-              boundaries, and the result the team needs.
+              Choose the outcome, not a preselected technology. A solution
+              can combine application development, retrieval, automation,
+              integrations and evaluation according to the work that needs to improve.
             </p>
           </div>
 
@@ -54,44 +54,20 @@ export default function ServicesPage() {
             <article className="studio-offer-card">
               <div className="studio-offer-top">
                 <span className="studio-offer-index">01</span>
-                <span>KNOWLEDGE</span>
+                <span>APPLICATIONS</span>
               </div>
-
-              <h3>Business knowledge systems</h3>
-
+              <h3>Custom AI applications</h3>
               <p className="studio-offer-description">
-                Document ingestion, search, retrieval, reranking,
-                evidence-grounded answers, and evaluation for internal
-                knowledge.
+                Complete AI-powered applications—from internal knowledge
+                and RAG systems to document intelligence, copilots and
+                decision-support tools.
               </p>
-
               <div className="studio-offer-links">
-                <Link href="/services/knowledge-and-rag-systems">
-                  Knowledge and RAG systems ↗
+                <Link href="/services/ai-application-engineering">
+                  Application engineering ↗
                 </Link>
                 <Link href="/projects/evidenceflow">
                   Engineering reference: EvidenceFlow
-                </Link>
-              </div>
-            </article>
-
-            <article className="studio-offer-card">
-              <div className="studio-offer-top">
-                <span className="studio-offer-index">02</span>
-                <span>DOCUMENTS</span>
-              </div>
-
-              <h3>Document intelligence</h3>
-
-              <p className="studio-offer-description">
-                Model-assisted extraction, structured validation,
-                deterministic calculations, comparisons, and reviewable
-                outputs.
-              </p>
-
-              <div className="studio-offer-links">
-                <Link href="/services/document-intelligence">
-                  Document intelligence ↗
                 </Link>
                 <Link href="/projects/quotesense">
                   Engineering reference: QuoteSense
@@ -101,24 +77,39 @@ export default function ServicesPage() {
 
             <article className="studio-offer-card">
               <div className="studio-offer-top">
-                <span className="studio-offer-index">03</span>
-                <span>WORKFLOWS</span>
+                <span className="studio-offer-index">02</span>
+                <span>AGENTIC SYSTEMS</span>
               </div>
-
-              <h3>Agentic workflow automation</h3>
-
+              <h3>Agentic AI systems</h3>
               <p className="studio-offer-description">
-                Stateful orchestration, tool integrations, approval
-                points, exception handling, and controlled actions across
-                business systems.
+                Multi-step AI workflows that coordinate tools and
+                business systems with explicit state, scoped actions,
+                approval gates and recoverable execution.
               </p>
-
               <div className="studio-offer-links">
                 <Link href="/services/agentic-workflow-systems">
-                  Agentic workflow systems ↗
+                  Agentic systems ↗
                 </Link>
+              </div>
+            </article>
+
+            <article className="studio-offer-card">
+              <div className="studio-offer-top">
+                <span className="studio-offer-index">03</span>
+                <span>AUTOMATION</span>
+              </div>
+              <h3>Intelligent automation &amp; integration</h3>
+              <p className="studio-offer-description">
+                Connect existing software, reduce repetitive handoffs
+                and automate operational workflows through APIs and
+                workflow platforms with clear exception handling.
+              </p>
+              <div className="studio-offer-links">
                 <Link href="/services/workflow-automation-and-integration">
-                  Workflow automation and integration
+                  Automation &amp; integration ↗
+                </Link>
+                <Link href="/services/agentic-workflow-systems">
+                  Agentic workflow engineering
                 </Link>
               </div>
             </article>
@@ -133,14 +124,13 @@ export default function ServicesPage() {
               <p className="studio-eyebrow">
                 Supporting engineering capabilities
               </p>
-              <h2>Engineering work across the full system.</h2>
+              <h2>The engineering work behind every solution.</h2>
             </div>
 
             <p>
-              Application design, provider integration, orchestration,
-              data handling, evaluation, and operational ownership are
-              considered as part of the system rather than isolated
-              add-ons.
+              AI is only one part of a working solution. Application
+              architecture, data engineering, provider integration,
+              evaluation, deployment and handover are designed together.
             </p>
           </div>
 
@@ -182,10 +172,11 @@ export default function ServicesPage() {
         <div className="studio-container studio-contact-cta-inner">
           <div>
             <p className="studio-eyebrow">Scoping and fit</p>
-            <h2>Not sure which capability fits the problem?</h2>
+            <h2>Have a business problem that needs a better system?</h2>
             <p>
-              Start with the workflow and constraints. The right solution
-              may combine more than one discipline.
+              Tell me what needs to improve. I will help define whether
+              the right answer is a custom AI application, an agentic system,
+              intelligent automation or a combination.
             </p>
           </div>
 

@@ -40,12 +40,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
 
   title: {
-    default: "AI Engineering Studio | Human-led AI Solutions",
+    default: "AI Engineering Studio | AI Solutions & Automation",
     template: "%s | AI Engineering Studio",
   },
 
   description:
-    "A founder-led AI solutions agency building document intelligence, evidence-grounded knowledge systems and agent-powered workflows. Human-led, engineered around real business outcomes.",
+    "An independent, founder-led AI solutions and engineering agency building custom AI applications, agentic systems and intelligent automation for real business operations.",
 
   applicationName: BRAND_NAME,
 
@@ -54,9 +54,9 @@ export const metadata: Metadata = {
   },
 
   openGraph: {
-    title: "AI Engineering Studio | Human-led AI Solutions",
+    title: "AI Engineering Studio | AI Solutions & Engineering",
     description:
-      "Human-led. Agent-powered. Outcome-driven. Custom AI systems for documents, knowledge and business operations.",
+      "Custom AI applications, agentic systems and intelligent automation—engineered around real business problems.",
     url: SITE_URL,
     siteName: BRAND_NAME,
     type: "website",
@@ -74,9 +74,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: BRAND_NAME,
+    title: "AI Solutions & Engineering | " + BRAND_NAME,
     description:
-      "Human-led AI engineering for documents, knowledge and business workflows.",
+      "Custom AI applications, agentic systems and intelligent automation for real business workflows.",
     images: ["/opengraph-image"],
   },
 
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
 };
 
 const nav: string[][] = [
-  ["Services", "/services"],
+  ["Solutions", "/services"],
   ["Work", "/#work"],
   ["Technical Lab", "/technical-lab"],
   ["Approach", "/approach"],
@@ -132,7 +132,7 @@ const professionalServiceJsonLd = {
   "@id": `${SITE_URL}/#professional-service`,
   name: BRAND_NAME,
   description:
-    "An independent, founder-led AI solutions practice building document intelligence, knowledge retrieval systems, agentic workflows and custom AI applications.",
+    "An independent, founder-led AI solutions and engineering agency designing, building and integrating custom AI applications, knowledge systems, agentic workflows and intelligent automation.",
   url: SITE_URL,
   provider: {
     "@id": `${SITE_URL}/#organization`,
@@ -143,13 +143,13 @@ const professionalServiceJsonLd = {
     url: "https://www.linkedin.com/in/sk-asaif-ali-134873243",
   },
   areaServed: ["India", "Worldwide"],
-  slogan: "Human-led. Agent-powered. Outcome-driven.",
+  slogan: "AI solutions, engineered around real work.",
   serviceType: [
-    "Custom AI application engineering",
-    "Document intelligence",
-    "Knowledge and retrieval systems",
-    "Agentic workflow systems",
-    "AI automation",
+    "AI solutions strategy and engineering",
+    "Custom AI applications",
+    "Agentic AI systems",
+    "Intelligent workflow automation and integration",
+    "Document intelligence and knowledge systems",
     "AI evaluation and reliability",
   ],
 };
@@ -210,7 +210,7 @@ export default function RootLayout({
                 <span className="brand-wordmark">
                   <strong>AI ENGINEERING</strong>
                   <small>
-                    HUMAN-LED · AGENT-POWERED
+                    AI SOLUTIONS · ENGINEERING
                   </small>
                 </span>
               </Link>
@@ -227,7 +227,7 @@ export default function RootLayout({
               </nav>
 
               <Link className="nav-cta" href="/contact">
-                Discuss a workflow{" "}
+                Discuss an AI solution{" "}
                 <span aria-hidden="true">↗</span>
               </Link>
 
@@ -253,14 +253,14 @@ export default function RootLayout({
                   <span>
                     <strong>AI ENGINEERING STUDIO</strong>
                     <small>
-                      INDEPENDENT AI SOLUTIONS PRACTICE
+                      AI SOLUTIONS & ENGINEERING AGENCY
                     </small>
                   </span>
                 </Link>
 
                 <p>
-                  Human-led. Agent-powered.
-                  Outcome-driven. Directly led by Asaif Ali.
+                  Custom AI applications, agentic systems and
+                  intelligent automation. Founder-led by Asaif Ali.
                 </p>
               </div>
 
@@ -269,7 +269,7 @@ export default function RootLayout({
                   <span className="footer-label">
                     Explore
                   </span>
-                  <Link href="/services">Services</Link>
+                  <Link href="/services">Solutions</Link>
                   <Link href="/approach">Approach</Link>
                   <Link href="/#work">Selected work</Link>
                   <Link href="/technical-lab">

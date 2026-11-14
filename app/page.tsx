@@ -12,17 +12,17 @@ import { FEATURED_PROJECT_SLUGS } from "@/lib/featured-projects";
 export const metadata: Metadata = {
   title: {
     absolute:
-      "AI Engineering Studio | Human-led AI Solutions & Agentic Systems",
+      "AI Engineering Studio | AI Solutions, Engineering & Automation",
   },
   description:
-    "Human-led. Agent-powered. Outcome-driven. A founder-led AI solutions agency building document intelligence, evidence-grounded RAG and custom workflow automation.",
+    "An independent, founder-led AI solutions and engineering agency building custom AI applications, agentic systems and intelligent automation around real business problems.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
-    title: "AI Engineering Studio | Human-led AI Solutions",
+    title: "AI Engineering Studio | AI Solutions & Engineering",
     description:
-      "Custom AI systems for document-heavy operations, internal knowledge and multi-step business workflows.",
+      "Custom AI applications, agentic systems and intelligent automation engineered around real business operations.",
     url: "/",
     siteName: "AI Engineering Studio",
     type: "website",
@@ -30,9 +30,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "AI Engineering Studio",
+    title: "AI Solutions & Engineering | AI Engineering Studio",
     description:
-      "Human-led AI engineering for documents, knowledge and business operations.",
+      "Custom AI applications, agentic systems and intelligent automation for real business workflows.",
   },
 };
 
@@ -177,23 +177,23 @@ export default async function Home() {
           <div className="refresh-hero-copy">
             <p className="studio-eyebrow">
               <span className="refresh-eyebrow-dot" />
-              HUMAN-LED · AGENT-POWERED · OUTCOME-DRIVEN
+              AI SOLUTIONS & ENGINEERING AGENCY
             </p>
 
             <h1>
-              Make complex work <span>move.</span>
+              AI solutions for <span>complex work.</span>
             </h1>
 
             <p className="refresh-hero-lede">
-              I build practical AI systems for document-heavy
-              operations, internal knowledge and multi-step
-              business workflows.
+              I design, build and deploy custom AI solutions—from
+              intelligent applications and knowledge systems to
+              agentic workflows and business automation.
             </p>
 
             <p className="refresh-hero-detail">
-              Specialist AI workflows support the engineering.
-              I lead discovery, architecture, implementation,
-              evaluation and final delivery.
+              An independent, founder-led engineering practice.
+              I lead discovery, architecture, implementation and
+              evaluation, with human approval at every consequential step.
             </p>
 
             <div className="refresh-hero-actions">
@@ -201,7 +201,7 @@ export default async function Home() {
                 className="refresh-button refresh-button-dark"
                 href="/contact"
               >
-                Discuss a workflow <span>↗</span>
+                Discuss an AI solution <span>↗</span>
               </Link>
 
               <div className="refresh-hero-secondary-links">
@@ -229,9 +229,9 @@ export default async function Home() {
             </div>
 
             <div className="refresh-hero-proof">
-              <span>Founder-led delivery</span>
-              <span>AI-assisted specialist workflows</span>
-              <span>Human approval and accountability</span>
+              <span>Custom AI solutions</span>
+              <span>Agentic systems &amp; automation</span>
+              <span>Founder-led engineering</span>
             </div>
           </div>
 
@@ -376,65 +376,61 @@ export default async function Home() {
           <div className="refresh-section-intro">
             <div>
               <p className="studio-eyebrow">
-                02 / WHAT I BUILD
+                02 / SOLUTION PILLARS
               </p>
 
               <h2>
-                Three capabilities.{" "}
-                <em>One joined-up practice.</em>
+                Three solution pillars.{" "}
+                <em>One connected engineering practice.</em>
               </h2>
             </div>
 
             <p>
-              I select the engineering approach around the
-              process, data and outcome—not around a
-              preselected framework.
+              From custom applications to connected workflows,
+              I engineer the complete system around your operations,
+              data, users and constraints.
             </p>
           </div>
 
           <div className="refresh-service-grid">
             <article className="refresh-service-card refresh-service-coral">
-              <span>01 / DOCUMENTS</span>
+              <span>01 / CUSTOM APPLICATIONS</span>
               <div className="refresh-service-symbol">▤</div>
-              <h3>Document intelligence</h3>
+              <h3>Custom AI applications</h3>
               <p>
-                Extract, validate, compare and route information
-                from documents with reviewable results and
-                deterministic business rules.
+                Build complete AI-powered products—from knowledge
+                and RAG systems to document intelligence, copilots
+                and decision-support tools.
               </p>
-              <Link href="/services/document-intelligence">
+              <Link href="/services/ai-application-engineering">
                 Explore service ↗
               </Link>
             </article>
 
             <article className="refresh-service-card refresh-service-blue">
-              <span>02 / KNOWLEDGE</span>
+              <span>02 / AGENTIC SYSTEMS</span>
               <div className="refresh-service-symbol">⌕</div>
-              <h3>Knowledge systems</h3>
+              <h3>Agentic AI systems</h3>
               <p>
-                Make internal information easier to find and
-                use with retrieval, evidence-grounded answers
-                and evaluation.
+                Coordinate multi-step work across tools and
+                business systems with stateful orchestration,
+                scoped actions, approval gates and recovery paths.
               </p>
-              <Link href="/services/knowledge-and-rag-systems">
+              <Link href="/services/agentic-workflow-systems">
                 Explore service ↗
               </Link>
             </article>
 
             <article className="refresh-service-card refresh-service-lime">
-              <span>03 / OPERATIONS</span>
+              <span>03 / INTELLIGENT AUTOMATION</span>
               <div className="refresh-service-symbol">⤴</div>
-              <h3>Workflow automation</h3>
+              <h3>Automation &amp; integration</h3>
               <p>
-                Connect tools and APIs with stateful
-                orchestration, approval points, exception
-                handling and human control.
+                Connect the software your team already uses,
+                reduce manual handoffs and orchestrate reliable
+                workflows through APIs and automation platforms.
               </p>
-              <p className="refresh-service-reference-note">
-                Agentic workflow reference architecture
-                available on request.
-              </p>
-              <Link href="/services/agentic-workflow-systems">
+              <Link href="/services/workflow-automation-and-integration">
                 Explore service ↗
               </Link>
             </article>
@@ -443,8 +439,8 @@ export default async function Home() {
           <div className="refresh-capability-note">
             <span>ALSO AVAILABLE</span>
             <p>
-              AI application engineering · API integration ·
-              AI evaluation &amp; reliability · workflow automation
+              Document intelligence · RAG &amp; knowledge systems ·
+              LLM integration · AI evaluation &amp; reliability
             </p>
             <Link href="/services">All services ↗</Link>
           </div>

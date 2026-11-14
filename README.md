@@ -3,7 +3,7 @@
 
 **Human-led. Agent-powered. Outcome-driven.**
 
-An independent, founder-led AI solutions practice focused on document intelligence, evidence-grounded knowledge systems and controlled workflow automation.
+An independent, founder-led AI solutions and engineering agency building custom AI applications, agentic systems and intelligent automation around real business problems.
 
 The studio is directly led by Asaif Ali. Specialist AI-assisted workflows can support bounded tasks such as research, architecture support, implementation assistance and evaluation. Technical decisions, client communication, approvals and final delivery remain human-led and accountable.
 
@@ -18,7 +18,7 @@ These are independent engineering builds, not paid client case studies or custom
 
 ## Website experience
 
-The homepage covers the operating problems addressed, service capabilities, the delivery model, selected engineering work, illustrative sample walkthroughs, founder information, engagement models and the contact path.
+The homepage positions the studio as an AI solutions and engineering agency. Its three primary solution pillars are custom AI applications, agentic AI systems, and intelligent automation and integration. Supporting capabilities include document intelligence, RAG and knowledge systems, LLM integration, evaluation, deployment and handover.
 
 The advanced live model workbench is available at `/technical-lab`. It allows technical evaluators to connect their own supported AI provider API key for live model requests. It is optional and intended for testing with limited-spend credentials and synthetic or non-confidential data only.
 
